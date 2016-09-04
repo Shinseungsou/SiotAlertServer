@@ -1,7 +1,12 @@
-from bs4 import BeautifulSoup
-import urllib2, json, urllib
+import json
+import urllib
+import urllib2
+
 from apscheduler.schedulers.blocking import BlockingScheduler
-from private import private
+from bs4 import BeautifulSoup
+
+import private
+
 
 def parse():
     print
@@ -23,11 +28,7 @@ def schdule():
     import schedule
     import time
 
-    def job(t):
-        print "I'm working...", t
-        return
-
-    schedule.every(1).minutes.do(sendAlert)
+    schedule.every().day.at('01:48').do(sendAlert)
 
     while True:
         schedule.run_pending()
@@ -56,6 +57,7 @@ def sendAlert():
 
         message = urllib2.urlopen(url).read()
         print message
+        break
 
 
 def sch():
