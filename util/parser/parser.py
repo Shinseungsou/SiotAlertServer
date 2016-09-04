@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
-import urllib2
+import urllib2, json, urllib
 from apscheduler.schedulers.blocking import BlockingScheduler
-
+from private import private
 
 def parse():
     print
@@ -9,9 +9,15 @@ def parse():
     r = urllib2.urlopen(url)
     soup = BeautifulSoup(r, "html.parser", from_encoding='utf-8')
     select = soup.select("ol#realrank > li")
+    result = dict()
     for rank in select:
         if len(rank.attrs) < 3:
-            print rank.attrs["value"], rank.a['title']
+            # print rank.attrs["value"], rank.a['title']
+            result[rank.attrs["value"]] = rank.a['title']
+
+
+    return result
+
 
 def schdule():
     import schedule
@@ -21,11 +27,36 @@ def schdule():
         print "I'm working...", t
         return
 
-    schedule.every().day.at("02:57").do(job,'It is 01:00')
+    schedule.every(1).minutes.do(sendAlert)
 
     while True:
         schedule.run_pending()
         time.sleep(10)
+
+
+def sendAlert():
+    key = private.key
+    get_chat = 'https://api.telegram.org/bot' + key + '/getUpdates'
+
+    print get_chat
+    chat_response = urllib2.urlopen(get_chat).read()
+    chat_list = json.loads(chat_response)
+    chat_id = chat_list['result'][1]['message']['chat']['id']
+    rank = parse()
+    text = ""
+    for r in range(1, 11):
+        text += str(r)+' '+rank[str(r)]+'\n'
+    text = urllib.quote(text.encode('utf-8'))
+
+    for i in chat_list['result']:
+        chat_id = i['message']['chat']['id']
+
+        url = 'https://api.telegram.org/bot' + key + '/sendMessage?chat_id=' + str(chat_id) + '&text=' + text
+        print url
+
+        message = urllib2.urlopen(url).read()
+        print message
+
 
 def sch():
     def some_job():
@@ -37,4 +68,7 @@ def sch():
 
 if __name__ == "__main__":
     # parser()
-    sch()
+    # sch()
+    # print parse()
+    # sendAlert()
+    schdule()
