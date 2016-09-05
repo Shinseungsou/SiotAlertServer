@@ -35,7 +35,7 @@ def schdule():
     # schedule.every().day.at('14:29').do(sendAlert)
     # schedule.every().day.at('14:31').do(sendAlert)
     # schedule.every().day.at('14:33').do(sendAlert)
-    schedule.every().day.at('03:16').do(timer)
+    schedule.every().day.at('18:20').do(timer)
 
     while True:
         schedule.run_pending()
@@ -56,11 +56,11 @@ def timer():
     # print (second-first)
     ##################################################
 
-    limit = datetime.now().replace(hour=3, minute=25)
-    nexttime = datetime.now() + timedelta(minutes=1)
-    offset = timedelta(seconds=15)
-    add_minutes = timedelta(minutes=2)
-    sleep_sec = 15
+    limit = datetime.now().replace(hour=04, minute=00) + timedelta(days=1)
+    nexttime = datetime.now().replace(hour=01, minute=00) + timedelta(days=1)
+    offset = timedelta(minutes=3)
+    add_minutes = timedelta(minutes=30)
+    sleep_sec = 180
 
     while True:
         if datetime.now() > limit:
