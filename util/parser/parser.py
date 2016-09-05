@@ -9,6 +9,7 @@ from bs4 import BeautifulSoup
 import private
 import schedule
 import time
+from datetime import datetime, timedelta
 
 
 def parse():
@@ -28,67 +29,52 @@ def parse():
 
 
 def schdule():
-    #
+
     # schedule.every().day.at('14:25').do(sendAlert)
     # schedule.every().day.at('14:27').do(sendAlert)
     # schedule.every().day.at('14:29').do(sendAlert)
     # schedule.every().day.at('14:31').do(sendAlert)
     # schedule.every().day.at('14:33').do(sendAlert)
-    # schedule.every().day.at('14:35').do(sendAlert)
+    schedule.every().day.at('03:16').do(timer)
+
+    while True:
+        schedule.run_pending()
+        time.sleep(10)
+
+
+def timer():
+
+    '''
+     TEST CODE
+    '''
+    # first = datetime.now()
+    # time.sleep(5)
+    # second = datetime.now()
     #
-    # while True:
-    #     schedule.run_pending()
-    #     time.sleep(10)
-    scheduler1(00, 28, 0, 3)
+    # diff = second - first
+    # print diff, timedelta(minutes=30), timedelta(minutes=30)-diff
+    # print (second-first)
+    ##################################################
 
+    limit = datetime.now().replace(hour=3, minute=25)
+    nexttime = datetime.now() + timedelta(minutes=1)
+    offset = timedelta(seconds=15)
+    add_minutes = timedelta(minutes=2)
+    sleep_sec = 15
 
-def scheduler1(hour, mins, count, MAX):
-    print "schedule1"
-    if count >= MAX:
-        return
-    else:
-        count += 1
-
-    mins += 1
-    if mins >= 60:
-        hour += 1
-        mins = 0
-    if hour == 24:
-        hour = 0
-    print "time : ", hour, ':', mins
-    print "count : ", count, '/', MAX
-    pass_count = count
-    schedule.every().days.at(str(hour)+':'+str(mins)).do(job, hour, mins, pass_count, MAX)
     while True:
-        schedule.run_pending()
-        time.sleep(10)
-
-
-def scheduler30(hour, mins, count, MAX):
-    if count >= MAX:
-        return
-    else:
-        count += 1
-
-    if mins == 30:
-        hour += 1
-        mins = 0
-    else:
-        mins = 30
-
-    if hour == 24:
-        hour = 0
-    schedule.every(60).days.at(str(hour)+':'+str(mins)).do(job, hour, mins, count, MAX)
-    while True:
-        schedule.run_pending()
-        time.sleep(10)
-
-def job(hour, mins, count, MAX):
-    print "send!"
-    print "time : ", hour, ':', mins
-    print "count : ", count, '/', MAX
-    sendAlert()
-    scheduler1(hour, mins, count, MAX)
+        if datetime.now() > limit:
+            print "break"
+            break
+        now = datetime.now()
+        print "current time", now
+        if nexttime - offset < now and now < nexttime + offset:
+            print "send alert ", nexttime
+            sendAlert()
+            nexttime += add_minutes
+        else:
+            print "sleep ", nexttime
+            time.sleep(sleep_sec)
 
 def sendAlert():
     key = private.key
@@ -129,4 +115,58 @@ if __name__ == "__main__":
     # sch()
     # print parse()
     # sendAlert()
-    schdule()
+    # schdule()
+    timer()
+
+
+
+
+
+#
+# def scheduler1(hour, mins, count, MAX):
+#     print "schedule1"
+#     if count >= MAX:
+#         return
+#     else:
+#         count += 1
+#
+#     mins += 1
+#     if mins >= 60:
+#         hour += 1
+#         mins = 0
+#     if hour == 24:
+#         hour = 0
+#     print "time : ", hour, ':', mins
+#     print "count : ", count, '/', MAX
+#     pass_count = count
+#     schedule.every().days.at(str(hour)+':'+str(mins)).do(job, hour, mins, pass_count, MAX)
+#     while True:
+#         schedule.run_pending()
+#         time.sleep(10)
+#
+#
+# def scheduler30(hour, mins, count, MAX):
+#     if count >= MAX:
+#         return
+#     else:
+#         count += 1
+#
+#     if mins == 30:
+#         hour += 1
+#         mins = 0
+#     else:
+#         mins = 30
+#
+#     if hour == 24:
+#         hour = 0
+#     schedule.every(60).days.at(str(hour)+':'+str(mins)).do(job, hour, mins, count, MAX)
+#     while True:
+#         schedule.run_pending()
+#         time.sleep(10)
+#
+# def job(hour, mins, count, MAX):
+#     print "send!"
+#     print "time : ", hour, ':', mins
+#     print "count : ", count, '/', MAX
+#     sendAlert()
+#     scheduler1(hour, mins, count, MAX)
