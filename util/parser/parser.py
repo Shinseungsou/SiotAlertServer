@@ -21,11 +21,31 @@ def parse():
     result = dict()
     for rank in select:
         if len(rank.attrs) < 3:
-            # print rank.attrs["value"], rank.a['title']
+            print rank.attrs["value"], rank.a['title']
             result[rank.attrs["value"]] = rank.a['title']
-
+            if(int(rank.attrs["value"]) <= 2):
+                result[rank.attrs["value"]] += "\n"
+                result[rank.attrs["value"]] += parseNews(rank.a.attrs["href"])
 
     return result
+
+def parseNews(url):
+    r = urllib2.urlopen(url)
+    soup = BeautifulSoup(r, "html.parser", from_encoding='utf-8')
+    title = soup.select("li#sp_nws_all1 > dl > dt")
+    print title
+    select = ""
+    if(len(title) > 0):
+        select += title[0].text
+        select += " - "
+    contents = soup.select("li#sp_nws_all1 > dl > dd")
+    print contents
+    if(len(contents) > 0):
+        select += contents[1].text
+    # select = soup.prettify()
+    print select
+    return select
+
 
 
 def schdule():
