@@ -77,38 +77,31 @@ def timer():
     startHour = 10
     endHour = 17
     startDay = 9
-    endDay = 9
+    endDay = 10
 
-
+    # TIEMZONE
     startHour -= 9
     endHour -= 9
-    limit = datetime.now().replace(day=endDay, hour=endHour, minute=00)
-    nexttime = datetime.now().replace(hour=startHour, minute=00)
-    offset = timedelta(minutes=1)
-    add_minutes = timedelta(minutes=30)
-    sleep_sec = 119
+    sleep_sec = 60
 
     while True:
-        if datetime.now() > limit:
+        now = datetime.now()
+        if now.day >= endDay and now.hour >= endHour:
             print "break"
             break
-        now = datetime.now()
         print "current time", now
-        if nexttime - offset < now and now < nexttime + offset:
-            print "send alert ", nexttime
+
+        # if startHour <= now.hour <= endHour and (now.minute in [40, 41, 47, 48, 52, 54]): #For desktop
+        if startHour <= now.hour <= endHour and (now.minute in [30, 0]): #For server
+            print "send alert ", now
             sendAlert()
-            nexttime += add_minutes
+            time.sleep(sleep_sec)
         else:
-            print "sleep ", nexttime
+            print "sleep ", now
             time.sleep(sleep_sec)
 
 if __name__ == "__main__":
-    # sch()
-    # parse()
-    # sendAlert()
-    # schdule()
-    # timer()
-    print datetime.now().hour, datetime.now().minute
+    timer()
 
 
 
