@@ -47,55 +47,6 @@ def parseNews(url):
     return select
 
 
-
-def schdule():
-
-    # schedule.every().day.at('14:25').do(sendAlert)
-    # schedule.every().day.at('14:27').do(sendAlert)
-    # schedule.every().day.at('14:29').do(sendAlert)
-    # schedule.every().day.at('14:31').do(sendAlert)
-    # schedule.every().day.at('14:33').do(sendAlert)
-    schedule.every().day.at('18:20').do(timer)
-
-    while True:
-        schedule.run_pending()
-        time.sleep(10)
-
-
-def timer():
-
-    '''
-     TEST CODE
-    '''
-    # first = datetime.now()
-    # time.sleep(5)
-    # second = datetime.now()
-    #
-    # diff = second - first
-    # print diff, timedelta(minutes=30), timedelta(minutes=30)-diff
-    # print (second-first)
-    ##################################################
-
-    limit = datetime.now().replace(hour=04, minute=00) + timedelta(days=1)
-    nexttime = datetime.now().replace(hour=01, minute=00) + timedelta(days=1)
-    offset = timedelta(minutes=3)
-    add_minutes = timedelta(minutes=30)
-    sleep_sec = 180
-
-    while True:
-        if datetime.now() > limit:
-            print "break"
-            break
-        now = datetime.now()
-        print "current time", now
-        if nexttime - offset < now and now < nexttime + offset:
-            print "send alert ", nexttime
-            sendAlert()
-            nexttime += add_minutes
-        else:
-            print "sleep ", nexttime
-            time.sleep(sleep_sec)
-
 def sendAlert():
     key = private.key
     get_chat = 'https://api.telegram.org/bot' + key + '/getUpdates'
@@ -122,22 +73,42 @@ def sendAlert():
             print "fail"
 
 
-def sch():
-    def some_job():
-        print "Decorated job"
+def timer():
+    startHour = 10
+    endHour = 17
+    startDay = 9
+    endDay = 9
 
-    scheduler = BlockingScheduler()
-    scheduler.add_job(some_job, 'interval', seconds=30)
-    scheduler.start()
+
+    startHour -= 9
+    endHour -= 9
+    limit = datetime.now().replace(day=endDay, hour=endHour, minute=00)
+    nexttime = datetime.now().replace(hour=startHour, minute=00)
+    offset = timedelta(minutes=1)
+    add_minutes = timedelta(minutes=30)
+    sleep_sec = 119
+
+    while True:
+        if datetime.now() > limit:
+            print "break"
+            break
+        now = datetime.now()
+        print "current time", now
+        if nexttime - offset < now and now < nexttime + offset:
+            print "send alert ", nexttime
+            sendAlert()
+            nexttime += add_minutes
+        else:
+            print "sleep ", nexttime
+            time.sleep(sleep_sec)
 
 if __name__ == "__main__":
-    # parser()
     # sch()
-    # print parse()
+    # parse()
     # sendAlert()
     # schdule()
-    timer()
-
+    # timer()
+    print datetime.now().hour, datetime.now().minute
 
 
 
@@ -190,3 +161,13 @@ if __name__ == "__main__":
 #     print "count : ", count, '/', MAX
 #     sendAlert()
 #     scheduler1(hour, mins, count, MAX)
+#
+#
+#
+# def sch():
+#     def some_job():
+#         print "Decorated job"
+#
+#     scheduler = BlockingScheduler()
+#     scheduler.add_job(some_job, 'interval', seconds=30)
+#     scheduler.start()
