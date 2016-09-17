@@ -44,7 +44,7 @@ def parseNews(url):
     if(len(contents) > 0):
         select += contents[1].text
     # select = soup.prettify()
-    print select
+    print select.encode('utf-8')
     return select
 
 
@@ -76,13 +76,13 @@ def sendAlert():
 
 def timer():
     startHour = 10
-    endHour = 17
+    endHour = 21
     startDay = 9
     endDay = 10
 
     # TIMEZONE
-    startHour -= 0
-    endHour -= 0
+    startHour -= 9
+    endHour -= 9
     sleep_sec = 60
 
     while True:
@@ -93,7 +93,7 @@ def timer():
         print "current time", now
 
         # if startHour <= now.hour <= endHour and (now.minute in [40, 41, 47, 48, 52, 54]): #For desktop
-        if startHour <= now.hour <= endHour and (now.minute in [30, 0, 24,25,26,27,28,29]): #For server
+        if startHour <= now.hour <= endHour and (now.minute in [30, 0,10,20,40,50]): #For server
             print "send alert ", now
             sendAlert()
             time.sleep(sleep_sec)
