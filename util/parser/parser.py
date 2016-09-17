@@ -21,8 +21,8 @@ def parse():
     result = dict()
     for rank in select:
         if len(rank.attrs) < 3:
-            print rank.attrs["value"], 
-            print rank.a['title']
+            print rank.attrs["value"].encode('utf-8'),
+            print rank.a['title'].encode('utf-8')
             result[rank.attrs["value"]] = rank.a['title']
             if(int(rank.attrs["value"]) <= 2):
                 result[rank.attrs["value"]] += "\n"
@@ -80,9 +80,9 @@ def timer():
     startDay = 9
     endDay = 10
 
-    # TIEMZONE
-    startHour -= 9
-    endHour -= 9
+    # TIMEZONE
+    startHour -= 0
+    endHour -= 0
     sleep_sec = 60
 
     while True:
@@ -93,7 +93,7 @@ def timer():
         print "current time", now
 
         # if startHour <= now.hour <= endHour and (now.minute in [40, 41, 47, 48, 52, 54]): #For desktop
-        if startHour <= now.hour <= endHour and (now.minute in [30, 0]): #For server
+        if startHour <= now.hour <= endHour and (now.minute in [30, 0, 24,25,26,27,28,29]): #For server
             print "send alert ", now
             sendAlert()
             time.sleep(sleep_sec)
