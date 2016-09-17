@@ -21,7 +21,8 @@ def parse():
     result = dict()
     for rank in select:
         if len(rank.attrs) < 3:
-            print rank.attrs["value"], rank.a['title']
+            print rank.attrs["value"], 
+            print rank.a['title']
             result[rank.attrs["value"]] = rank.a['title']
             if(int(rank.attrs["value"]) <= 2):
                 result[rank.attrs["value"]] += "\n"
