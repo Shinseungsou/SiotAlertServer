@@ -75,10 +75,10 @@ def sendAlert():
 
 
 def timer():
-    startHour = 10
-    endHour = 21
+    startHour = 00
+    endHour = 24
     startDay = 9
-    endDay = 10
+    endDay = 15
 
     # TIMEZONE
     startHour -= 9
@@ -93,7 +93,7 @@ def timer():
         print "current time", now
 
         # if startHour <= now.hour <= endHour and (now.minute in [40, 41, 47, 48, 52, 54]): #For desktop
-        if startHour <= now.hour <= endHour and (now.minute in [30, 0,10,20,40,50]): #For server
+        if startHour <= now.hour <= endHour and (now.minute in [30, 0]):#,10,20,40,50]): #For server
             print "send alert ", now
             sendAlert()
             time.sleep(sleep_sec)
