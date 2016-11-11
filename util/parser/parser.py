@@ -1,15 +1,12 @@
 import json
+import time
 import urllib
 import urllib2
-
-from apscheduler.schedulers.blocking import BlockingScheduler
+from datetime import datetime
 
 from bs4 import BeautifulSoup
 
 import private
-import schedule
-import time
-from datetime import datetime, timedelta
 
 
 def parse():
@@ -47,8 +44,13 @@ def parseNews(url):
     print select.encode('utf-8')
     return select
 
+people12 = []
+minute12 = []
+people6 = []
+minute6 = []
+isodd6 = [0, 1]
 
-def sendAlert():
+def sendAlert(hour, minute):
     key = private.key
     get_chat = 'https://api.telegram.org/bot' + key + '/getUpdates'
 
@@ -64,15 +66,21 @@ def sendAlert():
 
     for i in chat_list['result']:
         chat_id = i['message']['chat']['id']
+        if (chat_id not in people12 and chat_id not in people6) \
+                or (chat_id in people12 and minute in minute12) \
+                or (chat_id in people6 and minute in minute6 and hour % 2 in isodd6):
+            url = 'https://api.telegram.org/bot' + key + '/sendMessage?chat_id=' + str(chat_id) + '&text=' + text
+            print url
+            # print "12 : ", chat_id in people12, "; 6 : ", chat_id in people6
+            try:
+                message = urllib2.urlopen(url).read()
+                print message
+            except urllib2.HTTPError:
+                print "fail"
 
-        url = 'https://api.telegram.org/bot' + key + '/sendMessage?chat_id=' + str(chat_id) + '&text=' + text
-        print url
-        try:
-            message = urllib2.urlopen(url).read()
-            print message
-        except urllib2.HTTPError:
-            print "fail"
 
+end_date = datetime(2016, 9, 22, 22, 24)
+start_date = datetime(2016, 9, 22, 10, 0)
 
 def timer():
     startHour = 00
@@ -87,15 +95,19 @@ def timer():
 
     while True:
         now = datetime.now()
-        if now.day >= endDay and now.hour >= endHour:
-            print "break"
+        if now > end_date:
+            print now, ':', end_date, "bye", now - end_date
             break
+        if (now.hour >= endHour or now.hour < startHour):
+            print "deep sleep"
+            time.sleep(sleep_sec * 30)
         print "current time", now
 
         # if startHour <= now.hour <= endHour and (now.minute in [40, 41, 47, 48, 52, 54]): #For desktop
-        if startHour <= now.hour <= endHour and (now.minute in [30, 0]):#,10,20,40,50]): #For server
+        #if startHour <= now.hour <= endHour and (now.minute in [30, 0]):#,10,20,40,50]): #For server
+        if startHour <= now.hour <= endHour and (now.minute in [30, 0]): #For server
             print "send alert ", now
-            sendAlert()
+            sendAlert(now.hour, now.minute)
             time.sleep(sleep_sec)
         else:
             print "sleep ", now
