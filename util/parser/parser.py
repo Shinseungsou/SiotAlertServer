@@ -98,13 +98,13 @@ def sendAlert(hour, minute):
 
 
 start_date = datetime(2016, 11, 11, 02, 0)
-end_date = datetime(2016, 11, 15, 22, 24)
+end_date = datetime(2016, 11, 22, 22, 24)
 
 def timer():
-    startHour = 01
-    endHour = 22
+    startHour = 9
+    endHour = 19
     startDay = 9
-    endDay = 10
+    endDay = 15
 
     # TIMEZONE
     startHour -= 9
@@ -113,8 +113,8 @@ def timer():
 
     while True:
         now = datetime.now()
-        if (start_date - datetime.now()).total_seconds() > 0 and (end_date - datetime.now()).total_seconds() < 0:  # now > end_date:
-            print start_date, ": ", now, ':', end_date, "bye", now - end_date, "if status : ", (start_date - datetime.now()).total_seconds()
+        if now > end_date and now < start_date:
+            print start_date, ' : ', now, ':', end_date, "bye", now - end_date
             break
         if (now.hour >= endHour or now.hour < startHour):
             print "deep sleep"
@@ -122,7 +122,9 @@ def timer():
         print "current time", now
 
         # if startHour <= now.hour <= endHour and (now.minute in [40, 41, 47, 48, 52, 54]): #For desktop
-        if startHour <= now.hour <= endHour and (now.minute in [30, 0, 39, 40, 41, 42, 43, 44, 45]): #For server
+        # if startHour <= now.hour <= endHour and (now.minute in [30, 0, 39, 40, 41, 42, 43, 44, 45]): #For server
+        #if startHour <= now.hour <= endHour and (now.minute in [30, 0]):#,10,20,40,50]): #For server
+        if startHour <= now.hour <= endHour and (now.minute in [30, 0]): #For server
             print "send alert ", now
             sendAlert(now.hour, now.minute)
             time.sleep(sleep_sec)
