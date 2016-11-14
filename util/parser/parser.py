@@ -3,7 +3,7 @@ import time
 import urllib
 import urllib2
 from datetime import datetime
-
+from config import config
 from bs4 import BeautifulSoup
 
 import private
@@ -16,6 +16,7 @@ def parse():
     soup = BeautifulSoup(r, "html.parser", from_encoding='utf-8')
     select = soup.select("ol#realrank > li")
     result = dict()
+    news = []
     for rank in select:
         if len(rank.attrs) < 3:
             print rank.attrs["value"].encode('utf-8'),
@@ -23,9 +24,9 @@ def parse():
             result[rank.attrs["value"]] = rank.a['title']
             if(int(rank.attrs["value"]) <= 2):
                 result[rank.attrs["value"]] += "\n"
-                result[rank.attrs["value"]] += parseNews(rank.a.attrs["href"])
+                news.append(parseNews(rank.a.attrs["href"]))
 
-    return result
+    return result, news
 
 def parseNews(url):
     r = urllib2.urlopen(url)
@@ -54,18 +55,35 @@ def sendAlert(hour, minute):
     key = private.key
     get_chat = 'https://api.telegram.org/bot' + key + '/getUpdates'
 
+    db = config.mjudb().getDB()
+    cursor = db.cursor()
+
+
     print get_chat
     chat_response = urllib2.urlopen(get_chat).read()
     chat_list = json.loads(chat_response)
     # chat_id = chat_list['result'][1]['message']['chat']['id']
-    rank = parse()
+    rank, news = parse()
+    for r in rank:
+        cursor.execute("", )
+    print rank
     text = ""
     for r in range(1, 11):
         text += str(r)+' '+rank[str(r)]+'\n'
     text = urllib.quote(text.encode('utf-8'))
 
-    for i in chat_list['result']:
-        chat_id = i['message']['chat']['id']
+    cursor.execute("select * from user")
+    print tuple([d[0] for d in cursor.description])
+    users = []
+    for u in cursor:
+        users.append(u[1])
+    db.close()
+
+    for i in users:
+        # chat_id = i['message']['chat']['id']
+        # chat_id = 202959968
+        chat_id = i
+
         if (chat_id not in people12 and chat_id not in people6) \
                 or (chat_id in people12 and minute in minute12) \
                 or (chat_id in people6 and minute in minute6 and hour % 2 in isodd6):
@@ -79,12 +97,12 @@ def sendAlert(hour, minute):
                 print "fail"
 
 
-end_date = datetime(2016, 9, 22, 22, 24)
-start_date = datetime(2016, 9, 22, 10, 0)
+start_date = datetime(2016, 11, 11, 02, 0)
+end_date = datetime(2016, 11, 15, 22, 24)
 
 def timer():
-    startHour = 10
-    endHour = 21
+    startHour = 01
+    endHour = 22
     startDay = 9
     endDay = 10
 
@@ -95,8 +113,8 @@ def timer():
 
     while True:
         now = datetime.now()
-        if now > end_date:
-            print now, ':', end_date, "bye", now - end_date
+        if (start_date - datetime.now()).total_seconds() > 0 and (end_date - datetime.now()).total_seconds() < 0:  # now > end_date:
+            print start_date, ": ", now, ':', end_date, "bye", now - end_date, "if status : ", (start_date - datetime.now()).total_seconds()
             break
         if (now.hour >= endHour or now.hour < startHour):
             print "deep sleep"
@@ -104,7 +122,7 @@ def timer():
         print "current time", now
 
         # if startHour <= now.hour <= endHour and (now.minute in [40, 41, 47, 48, 52, 54]): #For desktop
-        if startHour <= now.hour <= endHour and (now.minute in [30, 0]): #For server
+        if startHour <= now.hour <= endHour and (now.minute in [30, 0, 39, 40, 41, 42, 43, 44, 45]): #For server
             print "send alert ", now
             sendAlert(now.hour, now.minute)
             time.sleep(sleep_sec)
@@ -114,6 +132,7 @@ def timer():
 
 if __name__ == "__main__":
     timer()
+    # print end_date - start_date, datetime.now()-start_date, (start_date - datetime.now()).total_seconds() < 0
 
 
 
