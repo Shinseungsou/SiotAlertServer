@@ -79,12 +79,12 @@ def sendAlert(hour, minute):
                 print "fail"
 
 
-end_date = datetime(2016, 9, 22, 22, 24)
-start_date = datetime(2016, 9, 22, 10, 0)
+end_date = datetime(2016, 11, 22, 22, 24)
+start_date = datetime(2016, 11, 11, 10, 0)
 
 def timer():
-    startHour = 00
-    endHour = 24
+    startHour = 9
+    endHour = 19
     startDay = 9
     endDay = 15
 
@@ -95,8 +95,8 @@ def timer():
 
     while True:
         now = datetime.now()
-        if now > end_date:
-            print now, ':', end_date, "bye", now - end_date
+        if now > end_date and now < start_date:
+            print start_date, ' : ', now, ':', end_date, "bye", now - end_date
             break
         if (now.hour >= endHour or now.hour < startHour):
             print "deep sleep"
