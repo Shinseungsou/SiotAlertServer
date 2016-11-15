@@ -33,16 +33,15 @@ def parseNews(url):
     soup = BeautifulSoup(r, "html.parser", from_encoding='utf-8')
     title = soup.select("li#sp_nws_all1 > dl > dt")
     print title
-    select = ""
+    select = dict()
     if(len(title) > 0):
-        select += title[0].text
-        select += " - "
+        select['title'] = title[0].text
     contents = soup.select("li#sp_nws_all1 > dl > dd")
     print contents
     if(len(contents) > 0):
-        select += contents[1].text
+        select['contents'] = contents[1].text
     # select = soup.prettify()
-    print select.encode('utf-8')
+    # print select.encode('utf-8')
     return select
 
 people12 = []
@@ -51,34 +50,117 @@ people6 = []
 minute6 = []
 isodd6 = [0, 1]
 
+
+def insert_news(db_connect, rank, news):
+    cursor = db_connect.cursor()
+    add_rank = ("insert into ranks"
+                "(rank0, rank0_title, rank0_contents, rank1, rank1_title, rank1_contents, "
+                "rank2, rank3, rank4, rank5, rank6, rank7, rank8, rank9, send_time)"
+                "values(%(rank0)s, %(rank0_title)s, %(rank0_contents)s, %(rank1)s, %(rank1_title)s, %(rank1_contents)s, "
+                "%(rank2)s, %(rank3)s, %(rank4)s, %(rank5)s, %(rank6)s, %(rank7)s, %(rank8)s, %(rank9)s, %(send_time)s)")
+    news_rank = {
+        'rank0': rank['1'],
+        'rank0_title': news[0]['title'],
+        'rank0_contents': news[0]['contents'],
+        'rank1': rank['2'],
+        'rank1_title': news[1]['title'],
+        'rank1_contents': news[1]['contents'],
+        'rank2': rank['3'],
+        'rank3': rank['4'],
+        'rank4': rank['5'],
+        'rank5': rank['6'],
+        'rank6': rank['7'],
+        'rank7': rank['8'],
+        'rank8': rank['9'],
+        'rank9': rank['10'],
+        'send_time': datetime.now()
+    }
+    print "------"
+    print news_rank['rank0_contents']
+    print "------"
+    print news_rank
+    print "------"
+    cursor.execute(add_rank, news_rank)
+    db_connect.commit()
+    cursor.close()
+
+
+def get_users(db_connect):
+    cursor = db_connect.cursor()
+
+    cursor.execute("select * from user")
+    users = []
+    for u in cursor:
+        users.append(u[1])
+    cursor.close()
+    return users
+
+def put_users(db_connect, users):
+    cursor = db_connect.cursor()
+
+    query = ("insert into user"
+            "(chat_id) values ")
+    for i in range(len(users)):
+        if i < 1:
+            query += '('+str(users[i])+')'
+        else:
+            query += ', ('+str(users[i])+')'
+    print query
+    cursor.execute(query)
+    db_connect.commit()
+    cursor.close()
+
+
 def sendAlert(hour, minute):
     key = private.key
     get_chat = 'https://api.telegram.org/bot' + key + '/getUpdates'
 
-    db = config.mjudb().getDB()
-    cursor = db.cursor()
-
+    db_connect = config.mjudb().getDB()
+    cursor = db_connect.cursor()
 
     print get_chat
     chat_response = urllib2.urlopen(get_chat).read()
     chat_list = json.loads(chat_response)
     # chat_id = chat_list['result'][1]['message']['chat']['id']
     rank, news = parse()
-    for r in rank:
-        cursor.execute("", )
+    insert_news(db_connect, rank, news)
+    print "rank"
     print rank
+    print news
+    print 'news'
+    for i in news:
+        print i
     text = ""
     for r in range(1, 11):
-        text += str(r)+' '+rank[str(r)]+'\n'
+        text += str(r)+' '+rank[str(r)]
+        if r <= 2:
+            text += news[r-1]['title'] + " - " + news[r-1]['contents'] + '\n'
+        else:
+            text += '\n'
+    raw_text = text
     text = urllib.quote(text.encode('utf-8'))
+    print
+    print raw_text
+    print
 
-    cursor.execute("select * from user")
-    print tuple([d[0] for d in cursor.description])
-    users = []
-    for u in cursor:
-        users.append(u[1])
-    db.close()
+    users = get_users(db_connect)
+    new_users = []
 
+    for i in chat_list['result']:
+        if not i['message']['chat']['id'] in users:
+            new_users.append(i['message']['chat']['id'])
+    print new_users
+    new_users.append(237)
+    new_users.append(238)
+    new_users.append(239)
+    put_users(db_connect, new_users)
+    if(True):
+        print users, users[0]
+        db_connect.close()
+        cursor.close()
+        return
+
+    # for i in chat_list['result']:
     for i in users:
         # chat_id = i['message']['chat']['id']
         # chat_id = 202959968
@@ -95,6 +177,9 @@ def sendAlert(hour, minute):
                 print message
             except urllib2.HTTPError:
                 print "fail"
+
+    db_connect.close()
+    cursor.close()
 
 
 start_date = datetime(2016, 11, 11, 02, 0)
@@ -133,7 +218,8 @@ def timer():
             time.sleep(sleep_sec)
 
 if __name__ == "__main__":
-    timer()
+    # timer()
+    sendAlert(1,1)
     # print end_date - start_date, datetime.now()-start_date, (start_date - datetime.now()).total_seconds() < 0
 
 
