@@ -4,3 +4,4 @@
 .env/
 private.*
 
+config.py
