@@ -92,7 +92,7 @@ def get_users(db_connect):
     cursor = db_connect.cursor()
     if test:
         cursor.execute("select * from user where uid = 4")
-    else :
+    else:
         cursor.execute("select * from user")
     users = []
     for u in cursor:
@@ -189,13 +189,10 @@ def sendAlert(hour, minute):
         # chat_id = 202959968
         chat_id = i['user_id']
         group_id = i['group']
-        rate = datetime.now().hour - startHour
-        print group_id, i
-        if group_id and (compare_time(pgroup[int(group_id) - 1]['interval'])):
-
-        # if (chat_id not in people12 and chat_id not in people6) \
-        #         or (chat_id in people12 and minute in minute12) \
-        #         or (chat_id in people6 and minute in minute6 and hour % 2 in isodd6):
+        now = datetime.now()
+        group_interval = pgroup[int(group_id) - 1]['interval']
+        print group_id, i, ' | ', now.minute % 2
+        if group_id and (compare_time(group_interval)) and now.minute % 2 == group_interval - 1:
             send_msg(chat_id, text)
 
 
@@ -232,7 +229,7 @@ def send_msg(chat_id, text):
         print "fail"
 
 
-startHour = 9
+startHour = 10
 endHour = 19
 startDay = 9
 endDay = 15
@@ -248,29 +245,35 @@ def timer():
         if now > end_date and now < start_date:
             print start_date, ' : ', now, ':', end_date, "bye", now - end_date
             break
-        if (now.hour >= endHour or now.hour < startHour):
-            print "deep sleep"
-            time.sleep(sleep_sec * 30)
-        print "current time", now
+        if endHour <= now.hour < startHour and (now.minute in [30, 0]):
+            print "send alert ", now
+            sendAlert(now.hour, now.minute)
+        else:
+            print "deep sleep ", now
+        delay = 30 - now.minute % 30
+        time.sleep(sleep_sec * delay)
 
         # if startHour <= now.hour <= endHour and (now.minute in [40, 41, 47, 48, 52, 54]): #For desktop
         # if startHour <= now.hour <= endHour and (now.minute in [30, 0, 39, 40, 41, 42, 43, 44, 45]): #For server
         #if startHour <= now.hour <= endHour and (now.minute in [30, 0]):#,10,20,40,50]): #For server
-        if startHour <= now.hour <= endHour and (now.minute in [30, 0]): #For server
-            print "send alert ", now
-            sendAlert(now.hour, now.minute)
-            time.sleep(sleep_sec)
-        else:
-            print "sleep ", now
-            time.sleep(sleep_sec)
+        # if startHour <= now.hour <= endHour ): #For server
+        #     pass
+        # else:
+        #     print "sleep ", now
+        #     time.sleep(sleep_sec)
 
 if __name__ == "__main__":
     # timer()
 
-    db_connect = config.mjudb().getDB()
-    pgroup = get_group(db_connect)
-    db_connect.close()
-    sendAlert(1,1)
+    # db_connect = config.mjudb().getDB()
+    # pgroup = get_group(db_connect)
+    # db_connect.close()
+    # sendAlert(1,1)
+    hh = [3, 7, 31, 59, 60, 30, 0] #27, 23, 29, 1, 0, 0, 0
+    div = 30
+    defa = 30
+    for i in hh:
+        print defa - i % div,
     # print end_date - start_date, datetime.now()-start_date, (start_date - datetime.now()).total_seconds() < 0
 
 
