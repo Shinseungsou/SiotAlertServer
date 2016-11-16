@@ -263,12 +263,13 @@ def timer():
         #     time.sleep(sleep_sec)
 
 if __name__ == "__main__":
-    # timer()
-
     db_connect = config.mjudb().getDB()
     pgroup = get_group(db_connect)
     db_connect.close()
-    sendAlert(1,1)
+
+    timer()
+
+    # sendAlert(1,1)
     # hh = [3, 7, 31, 59, 60, 30, 0] #27, 23, 29, 1, 0, 0, 0
     # div = 30
     # defa = 30
