@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 
 import private
 
+test = True
 
 def parse():
     print
@@ -50,6 +51,8 @@ people6 = []
 minute6 = []
 isodd6 = [0, 1]
 
+pgroup = []
+
 
 def insert_news(db_connect, rank, news):
     cursor = db_connect.cursor()
@@ -87,11 +90,16 @@ def insert_news(db_connect, rank, news):
 
 def get_users(db_connect):
     cursor = db_connect.cursor()
-
-    cursor.execute("select * from user")
+    if test:
+        cursor.execute("select * from user where uid = 4")
+    else :
+        cursor.execute("select * from user")
     users = []
     for u in cursor:
-        users.append(u[1])
+        temp_user = dict()
+        temp_user['user_id'] = u[1]
+        temp_user['group'] = u[2]
+        users.append(temp_user)
     cursor.close()
     return users
 
@@ -109,6 +117,21 @@ def put_users(db_connect, users):
     cursor.execute(query)
     db_connect.commit()
     cursor.close()
+
+def get_group(db_connect):
+    cursor = db_connect.cursor()
+    query = ("select * from msg_group order by uid asc")
+    cursor.execute(query)
+    group = []
+    for g in cursor:
+        temp_g = dict()
+        temp_g['id'] = g[0]
+        temp_g['interval'] = g[1]
+        temp_g['type'] = g[2]
+        group.append(temp_g)
+
+    cursor.close()
+    return group
 
 
 def sendAlert(hour, minute):
@@ -147,54 +170,78 @@ def sendAlert(hour, minute):
     new_users = []
 
     for i in chat_list['result']:
-        if not i['message']['chat']['id'] in users:
+        if not contains_user(i['message']['chat']['id'], users):
             new_users.append(i['message']['chat']['id'])
     print new_users
-    new_users.append(237)
-    new_users.append(238)
-    new_users.append(239)
-    put_users(db_connect, new_users)
-    if(True):
+    if not test:
+        put_users(db_connect, new_users)
+    if(False):
         print users, users[0]
         db_connect.close()
         cursor.close()
         return
 
+    # for i in users:
+    # for i in chat_list['result']:
     # for i in chat_list['result']:
     for i in users:
         # chat_id = i['message']['chat']['id']
         # chat_id = 202959968
-        chat_id = i
+        chat_id = i['user_id']
+        group_id = i['group']
+        rate = datetime.now().hour - startHour
+        print group_id, i
+        if group_id and (compare_time(pgroup[int(group_id) - 1]['interval'])):
 
-        if (chat_id not in people12 and chat_id not in people6) \
-                or (chat_id in people12 and minute in minute12) \
-                or (chat_id in people6 and minute in minute6 and hour % 2 in isodd6):
-            url = 'https://api.telegram.org/bot' + key + '/sendMessage?chat_id=' + str(chat_id) + '&text=' + text
-            print url
-            # print "12 : ", chat_id in people12, "; 6 : ", chat_id in people6
-            try:
-                message = urllib2.urlopen(url).read()
-                print message
-            except urllib2.HTTPError:
-                print "fail"
+        # if (chat_id not in people12 and chat_id not in people6) \
+        #         or (chat_id in people12 and minute in minute12) \
+        #         or (chat_id in people6 and minute in minute6 and hour % 2 in isodd6):
+            send_msg(chat_id, text)
+
 
     db_connect.close()
     cursor.close()
 
+def contains_user(user, users):
+    for u in users:
+        print user, ' with ', u['user_id']
+        if user == u['user_id']:
+            return True
+    return False
+
+def compare_time(interval):
+    min = interval % 1
+    hour = interval / 1
+    rate = datetime.now().hour - startHour
+    if rate % hour == 0 and (min == 0 or rate % interval == 0):
+        return True
+    return False
 
 start_date = datetime(2016, 11, 11, 02, 0)
 end_date = datetime(2016, 11, 22, 22, 24)
 
-def timer():
-    startHour = 9
-    endHour = 19
-    startDay = 9
-    endDay = 15
+def send_msg(chat_id, text):
+    key = private.key
+    url = 'https://api.telegram.org/bot' + key + '/sendMessage?chat_id=' + str(chat_id) + '&text=' + text
+    print url
+    # print "12 : ", chat_id in people12, "; 6 : ", chat_id in people6
+    try:
+        message = urllib2.urlopen(url).read()
+        print message
+    except urllib2.HTTPError:
+        print "fail"
 
-    # TIMEZONE
-    startHour -= 9
-    endHour -= 9
-    sleep_sec = 60
+
+startHour = 9
+endHour = 19
+startDay = 9
+endDay = 15
+
+# TIMEZONE
+startHour -= 9
+endHour -= 9
+sleep_sec = 60
+def timer():
 
     while True:
         now = datetime.now()
@@ -219,6 +266,10 @@ def timer():
 
 if __name__ == "__main__":
     # timer()
+
+    db_connect = config.mjudb().getDB()
+    pgroup = get_group(db_connect)
+    db_connect.close()
     sendAlert(1,1)
     # print end_date - start_date, datetime.now()-start_date, (start_date - datetime.now()).total_seconds() < 0
 
