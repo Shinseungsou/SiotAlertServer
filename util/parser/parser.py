@@ -7,7 +7,7 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 
 import private
-from util.parser import config
+import config
 
 test = False
 
