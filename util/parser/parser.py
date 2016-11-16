@@ -3,10 +3,11 @@ import time
 import urllib
 import urllib2
 from datetime import datetime
-from config import config
+
 from bs4 import BeautifulSoup
 
 import private
+from util.parser import config
 
 test = False
 
