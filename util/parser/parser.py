@@ -108,12 +108,12 @@ def put_users(db_connect, users):
     cursor = db_connect.cursor()
 
     query = ("insert into user"
-            "(chat_id) values ")
+            "(chat_id, group) values ")
     for i in range(len(users)):
         if i < 1:
-            query += '('+str(users[i])+')'
+            query += '('+str(users[i])+', 1)'
         else:
-            query += ', ('+str(users[i])+')'
+            query += ', ('+str(users[i])+', 1)'
     print query
     cursor.execute(query)
     db_connect.commit()
@@ -193,7 +193,7 @@ def sendAlert(hour, minute):
         now = datetime.now()
         group_interval = pgroup[int(group_id) - 1]['interval']
         print group_id, i, ' | ', now.minute % 2
-        if group_id and (compare_time(group_interval)) and now.minute % 2 == group_interval - 1:
+        if group_id and (compare_time(group_interval)) and now.hour % 2 == group_interval - 1:
             send_msg(chat_id, text)
 
 
