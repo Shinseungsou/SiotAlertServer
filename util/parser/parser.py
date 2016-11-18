@@ -174,7 +174,7 @@ def sendAlert(hour, minute):
         if not contains_user(i['message']['chat']['id'], users):
             new_users.append(i['message']['chat']['id'])
     print new_users
-    if not test:
+    if not test and len(new_users) > 0:
         put_users(db_connect, new_users)
     if(False):
         print users, users[0]
