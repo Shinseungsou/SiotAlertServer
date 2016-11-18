@@ -164,7 +164,7 @@ def sendAlert(hour, minute):
     raw_text = text
     text = urllib.quote(text.encode('utf-8'))
     print
-    print raw_text
+    print raw_text.encode('utf-8')
     print
 
     users = get_users(db_connect)
