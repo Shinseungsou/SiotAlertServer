@@ -252,6 +252,7 @@ def timer():
         else:
             print "deep sleep ", now
         delay = 30 - now.minute % 30
+        print "i can sleep ", delay, "minutes"
         time.sleep(sleep_sec * delay)
 
         # if startHour <= now.hour <= endHour and (now.minute in [40, 41, 47, 48, 52, 54]): #For desktop
@@ -267,6 +268,7 @@ if __name__ == "__main__":
     db_connect = config.mjudb().getDB()
     pgroup = get_group(db_connect)
     db_connect.close()
+    print "connect"
 
     timer()
 
