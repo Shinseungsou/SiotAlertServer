@@ -250,7 +250,7 @@ def timer():
             print "send alert ", now
             sendAlert(now.hour, now.minute)
         else:
-            print "deep sleep ", now
+            print "deep sleep ", now, " || [", startHour, "], [", endHour, "]"
         delay = 30 - now.minute % 30
         print "i can sleep ", delay, "minutes"
         time.sleep(sleep_sec * delay)
