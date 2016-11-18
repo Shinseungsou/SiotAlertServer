@@ -246,9 +246,9 @@ def timer():
         if now > end_date and now < start_date:
             print start_date, ' : ', now, ':', end_date, "bye", now - end_date
             break
-        print 'check : ', endHour <= now.hour < startHour, (now.minute in [30, 0]), now.minute
-        if endHour <= now.hour < startHour and (now.minute in [30, 0]):
-            print "send alert ", now 
+        print 'check : ', startHour <= now.hour < endHour, (now.minute in [30, 0]), now.minute
+        if startHour <= now.hour < endHour and (now.minute in [30, 0]):
+            print "send alert ", now
             sendAlert(now.hour, now.minute)
         else:
             print "deep sleep ", now, " || [", startHour, "], [", endHour, "]"
