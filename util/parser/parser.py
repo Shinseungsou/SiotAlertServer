@@ -80,7 +80,7 @@ def insert_news(db_connect, rank, news):
         'send_time': datetime.now()
     }
     print "------"
-    print news_rank['rank0_contents']
+    print news_rank['rank0_contents'].encode('utf-8')
     print "------"
     print news_rank
     print "------"
