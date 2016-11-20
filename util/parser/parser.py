@@ -193,7 +193,7 @@ def sendAlert(hour, minute):
         now = datetime.now()
         group_interval = pgroup[int(group_id) - 1]['interval']
         print group_id, i, ' | ', now.minute % 2
-        if group_id and (compare_time(group_interval)) and now.hour % 2 == group_interval - 1:
+        if group_id and (compare_time(group_interval, datetime.now())) and now.hour % 2 == group_interval - 1:
             send_msg(chat_id, text)
 
 
@@ -207,10 +207,10 @@ def contains_user(user, users):
             return True
     return False
 
-def compare_time(interval):
+def compare_time(interval, time):
     min = interval % 1
     hour = interval / 1
-    rate = datetime.now().hour - startHour
+    rate = time.hour - startHour + (startHour % 2)
     if rate % hour == 0 and (min == 0 or rate % interval == 0):
         return True
     return False
