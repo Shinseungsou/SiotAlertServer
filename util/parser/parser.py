@@ -9,10 +9,26 @@ from bs4 import BeautifulSoup
 import private
 import config
 
-test = False
+test = True
+print_news = False
+print_db = False
+print_alert = False
+
+
+start_date = datetime(2016, 11, 11, 02, 0)
+end_date = datetime(2016, 11, 22, 22, 24)
+
+startHour = 10
+endHour = 19
+
+# TIMEZONE
+startHour -= 9
+endHour -= 9
+sleep_sec = 60
 
 def parse():
-    print
+    if print_news:
+        print
     url = "http://naver.com"
     r = urllib2.urlopen(url)
     soup = BeautifulSoup(r, "html.parser", from_encoding='utf-8')
@@ -21,11 +37,21 @@ def parse():
     news = []
     for rank in select:
         if len(rank.attrs) < 3:
-            print rank.attrs["value"].encode('utf-8'),
-            print rank.a['title'].encode('utf-8')
+            if print_news:
+                print rank.attrs["value"].encode('utf-8'),
+                print rank.a['title'].encode('utf-8'),
+            rk = rank.select("span.rk")
+            tx = rank.select("span.tx")
+            up = ""
+            if len(rk) == 0:
+                up = tx[0].text
+            else:
+                up = tx[0].text + " " + rk[0].text
+            if print_news:
+                print up.encode('utf-8')
+            result["up"+rank.attrs["value"]] = up
             result[rank.attrs["value"]] = rank.a['title']
             if(int(rank.attrs["value"]) <= 2):
-                result[rank.attrs["value"]] += "\n"
                 news.append(parseNews(rank.a.attrs["href"]))
 
     return result, news
@@ -34,12 +60,14 @@ def parseNews(url):
     r = urllib2.urlopen(url)
     soup = BeautifulSoup(r, "html.parser", from_encoding='utf-8')
     title = soup.select("li#sp_nws_all1 > dl > dt")
-    print title
+    if print_news:
+        print title
     select = dict()
     if(len(title) > 0):
         select['title'] = title[0].text
     contents = soup.select("li#sp_nws_all1 > dl > dd")
-    print contents
+    if print_news:
+        print contents
     if(len(contents) > 0):
         select['contents'] = contents[1].text
     # select = soup.prettify()
@@ -58,32 +86,46 @@ pgroup = []
 def insert_news(db_connect, rank, news):
     cursor = db_connect.cursor()
     add_rank = ("insert into ranks"
-                "(rank0, rank0_title, rank0_contents, rank1, rank1_title, rank1_contents, "
-                "rank2, rank3, rank4, rank5, rank6, rank7, rank8, rank9, send_time)"
-                "values(%(rank0)s, %(rank0_title)s, %(rank0_contents)s, %(rank1)s, %(rank1_title)s, %(rank1_contents)s, "
-                "%(rank2)s, %(rank3)s, %(rank4)s, %(rank5)s, %(rank6)s, %(rank7)s, %(rank8)s, %(rank9)s, %(send_time)s)")
+                "(rank0, up0, rank0_title, rank0_contents, rank1, up1, rank1_title, rank1_contents, "
+                "rank2, up2, rank3, up3, rank4, up4, rank5, up5, "
+                "rank6, up6, rank7, up7, rank8, up8, rank9, up9, send_time)"
+                "values(%(rank0)s, %(up0)s, %(rank0_title)s, %(rank0_contents)s, "
+                "%(rank1)s, %(up1)s, %(rank1_title)s, %(rank1_contents)s, "
+                "%(rank2)s, %(up2)s, %(rank3)s, %(up3)s, %(rank4)s,%(up4)s,  %(rank5)s, %(up5)s, "
+                "%(rank6)s, %(up6)s, %(rank7)s, %(up7)s, %(rank8)s, %(up8)s, %(rank9)s, %(up9)s, %(send_time)s)")
     news_rank = {
         'rank0': rank['1'],
         'rank0_title': news[0]['title'],
         'rank0_contents': news[0]['contents'],
+        'up0': rank['up1'],
         'rank1': rank['2'],
         'rank1_title': news[1]['title'],
         'rank1_contents': news[1]['contents'],
+        'up1': rank['up2'],
         'rank2': rank['3'],
+        'up2': rank['up3'],
         'rank3': rank['4'],
+        'up3': rank['up4'],
         'rank4': rank['5'],
+        'up4': rank['up5'],
         'rank5': rank['6'],
+        'up5': rank['up6'],
         'rank6': rank['7'],
+        'up6': rank['up7'],
         'rank7': rank['8'],
+        'up7': rank['up8'],
         'rank8': rank['9'],
+        'up8': rank['up9'],
         'rank9': rank['10'],
+        'up9': rank['up10'],
         'send_time': datetime.now()
     }
-    print "------"
-    print news_rank['rank0_contents'].encode('utf-8')
-    print "------"
-    print news_rank
-    print "------"
+    if print_db:
+        print "------"
+        print news_rank['rank0_contents'].encode('utf-8')
+        print "------"
+        print news_rank
+        print "------"
     cursor.execute(add_rank, news_rank)
     db_connect.commit()
     cursor.close()
@@ -92,14 +134,14 @@ def insert_news(db_connect, rank, news):
 def get_users(db_connect):
     cursor = db_connect.cursor()
     if test:
-        cursor.execute("select * from user where uid = 4")
+        cursor.execute("select * from user where uid = 4 or chat_id = 202959968")
     else:
         cursor.execute("select * from user")
     users = []
     for u in cursor:
         temp_user = dict()
         temp_user['user_id'] = u[1]
-        temp_user['group'] = u[2]
+        temp_user['group_id'] = u[2]
         users.append(temp_user)
     cursor.close()
     return users
@@ -108,13 +150,14 @@ def put_users(db_connect, users):
     cursor = db_connect.cursor()
 
     query = ("insert into user"
-            "(chat_id, group) values ")
+            "(chat_id, group_id) values ")
     for i in range(len(users)):
         if i < 1:
             query += '('+str(users[i])+', 1)'
         else:
             query += ', ('+str(users[i])+', 1)'
-    print query
+    if print_db:
+        print query
     cursor.execute(query)
     db_connect.commit()
     cursor.close()
@@ -135,11 +178,29 @@ def get_group(db_connect):
     return group
 
 
-def sendAlert(hour, minute):
+def get_text(rank, news, type):
+    text = ""
+    if type == 1:
+        for r in range(1, 11):
+            text += str(r)+' '+rank[str(r)] + '\n'
+    elif type == 2:
+        for r in range(1, 11):
+            text += str(r)+' '+rank[str(r)]
+            text += ' ['+rank['up'+str(r)] + ']\n'
+    elif type == 3:
+        for r in range(1, 11):
+            text += str(r)+' '+rank[str(r)]
+            text += ' ['+rank['up'+str(r)] + ']'
+            if r <= 2:
+                text += '\n' + news[r-1]['title'] + " - " + news[r-1]['contents'] + '\n'
+            else:
+                text += '\n'
+    return text
+
+def sendAlert(db_connect, now):
     key = private.key
     get_chat = 'https://api.telegram.org/bot' + key + '/getUpdates'
 
-    db_connect = config.mjudb().getDB()
     cursor = db_connect.cursor()
 
     print get_chat
@@ -148,24 +209,13 @@ def sendAlert(hour, minute):
     # chat_id = chat_list['result'][1]['message']['chat']['id']
     rank, news = parse()
     insert_news(db_connect, rank, news)
-    print "rank"
-    print rank
-    print news
-    print 'news'
-    for i in news:
-        print i
-    text = ""
-    for r in range(1, 11):
-        text += str(r)+' '+rank[str(r)]
-        if r <= 2:
-            text += news[r-1]['title'] + " - " + news[r-1]['contents'] + '\n'
-        else:
-            text += '\n'
-    raw_text = text
-    text = urllib.quote(text.encode('utf-8'))
-    print
-    print raw_text.encode('utf-8')
-    print
+    if print_alert:
+        print "rank"
+        print rank
+        print news
+        print 'news'
+        for i in news:
+            print i
 
     users = get_users(db_connect)
     new_users = []
@@ -173,14 +223,23 @@ def sendAlert(hour, minute):
     for i in chat_list['result']:
         if not contains_user(i['message']['chat']['id'], users):
             new_users.append(i['message']['chat']['id'])
-    print new_users
+    if print_alert:
+        print new_users
     if not test and len(new_users) > 0:
         put_users(db_connect, new_users)
     if(False):
-        print users, users[0]
+        if print_alert:
+            print users, users[0]
         db_connect.close()
         cursor.close()
         return
+
+    text = get_text(rank, news, 3)
+    raw_text = text
+    if print_alert:
+        print
+        print raw_text.encode('utf-8')
+        print
 
     # for i in users:
     # for i in chat_list['result']:
@@ -189,15 +248,18 @@ def sendAlert(hour, minute):
         # chat_id = i['message']['chat']['id']
         # chat_id = 202959968
         chat_id = i['user_id']
-        group_id = i['group']
-        now = datetime.now()
-        group_interval = pgroup[int(group_id) - 1]['interval']
-        print group_id, i, ' | ', now.minute % 2
-        if group_id and (compare_time(group_interval, datetime.now())) and now.hour % 2 == group_interval - 1:
-            send_msg(chat_id, text)
+        group_id = i['group_id']
+
+        if group_id and group_id >= 0:
+            group_type = pgroup[int(group_id) - 1]['type']
+            text = get_text(rank, news, group_type)
+            group_interval = pgroup[int(group_id) - 1]['interval']
+            print group_id, i, ' | ', (compare_time(group_interval, now)), ' | '
+            if (compare_time(group_interval, now)):
+                text_temp = str(group_id) + '\n' + text
+                send_msg(chat_id, text_temp)
 
 
-    db_connect.close()
     cursor.close()
 
 def contains_user(user, users):
@@ -215,11 +277,10 @@ def compare_time(interval, time):
         return True
     return False
 
-start_date = datetime(2016, 11, 11, 02, 0)
-end_date = datetime(2016, 11, 22, 22, 24)
 
 def send_msg(chat_id, text):
     key = private.key
+    text = urllib.quote(text.encode('utf-8'))
     url = 'https://api.telegram.org/bot' + key + '/sendMessage?chat_id=' + str(chat_id) + '&text=' + text
     print url
     # print "12 : ", chat_id in people12, "; 6 : ", chat_id in people6
@@ -230,31 +291,24 @@ def send_msg(chat_id, text):
         print "fail"
 
 
-startHour = 10
-endHour = 19
-startDay = 9
-endDay = 15
-
-# TIMEZONE
-startHour -= 9
-endHour -= 9
-sleep_sec = 60
 def timer():
 
     while True:
+        db_connect = config.mjudb().getDB()
         now = datetime.now()
         if now > end_date and now < start_date:
             print start_date, ' : ', now, ':', end_date, "bye", now - end_date
             break
-        print 'check : ', startHour <= now.hour < endHour, (now.minute in [30, 0]), now.minute
-        if startHour <= now.hour < endHour and (now.minute in [30, 0]):
+        print 'check : ', startHour <= now.hour < endHour, (now.minute in [0]), now.minute
+        if startHour <= now.hour < endHour and (now.minute in [0]):
             print "send alert ", now
-            sendAlert(now.hour, now.minute)
+            sendAlert(db_connect, now)
         else:
             print "deep sleep ", now, " || [", startHour, "], [", endHour, "]"
         delay = 30 - now.minute % 30
         print "i can sleep ", delay, "minutes"
         time.sleep(sleep_sec * delay)
+        db_connect.close()
 
         # if startHour <= now.hour <= endHour and (now.minute in [40, 41, 47, 48, 52, 54]): #For desktop
         # if startHour <= now.hour <= endHour and (now.minute in [30, 0, 39, 40, 41, 42, 43, 44, 45]): #For server
@@ -265,15 +319,34 @@ def timer():
         #     print "sleep ", now
         #     time.sleep(sleep_sec)
 
+
 if __name__ == "__main__":
     db_connect = config.mjudb().getDB()
     pgroup = get_group(db_connect)
     db_connect.close()
-    print "connect"
-
+    # print "connect"
+    #
     timer()
+    # parse()
 
-    # sendAlert(1,1)
+    db_connect.close()
+    # t = datetime(2016, 11, 11, 04, 0)
+    # print compare_time(1, t)
+    # print compare_time(2, t)
+    # sendAlert(t)
+    # t = datetime(2016, 11, 11, 05, 0)
+    # print compare_time(1, t)
+    # print compare_time(2, t)
+    # sendAlert(t)
+    # t = datetime(2016, 11, 11, 06, 0)
+    # print compare_time(1, t)
+    # print compare_time(2, t)
+    # sendAlert(t)
+    # t = datetime(2016, 11, 11, 07, 0)
+    # print compare_time(1, t)
+    # print compare_time(2, t)
+    # sendAlert(t)
+    # sendAlert(datetime.now())
     # hh = [3, 7, 31, 59, 60, 30, 0] #27, 23, 29, 1, 0, 0, 0
     # div = 30
     # defa = 30
