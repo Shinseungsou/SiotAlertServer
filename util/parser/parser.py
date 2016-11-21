@@ -90,21 +90,21 @@ def parseTweet(keyword):
         i = 0
         for l in soup.select("div.rt_wrap > div > ul > li > dl"):
             twit = dict()
-            print l.select("span.user_name")[0].text, " - ",
+            print l.select("span.user_name")[0].text.encode('utf-8'), " - ",
             twit['name'] = l.select("span.user_name")[0].text
-            print l.select("dd:nth-of-type(2)")[0].text
+            print l.select("dd:nth-of-type(2)")[0].text.encode('utf-8')
             twit['text'] = l.select("dd:nth-of-type(2)")[0].text
-            print l.select("._timeinfo")[0].text, " | ",
+            print l.select("._timeinfo")[0].text.encode('utf-8'), " | ",
             twit['time'] = l.select("._timeinfo")[0].text
             if len(l.select(".sub_reply")) > 0:
-                print l.select(".sub_reply")[0].text," | ",
+                print l.select(".sub_reply")[0].text.encode('utf-8')," | ",
             if len(l.select(".sub_like")) > 0:
-                print l.select(".sub_like")[0].text," | ",
+                print l.select(".sub_like")[0].text.encode('utf-8')," | ",
                 twit['retweet'] = l.select(".sub_like")[0].text
-                print l.select(".sub_dis")[0].text
+                print l.select(".sub_dis")[0].text.encode('utf-8')
             elif len(l.select(".sub_retweet")) > 0:
-                print l.select(".sub_retweet")[0].text," | ",
-                print l.select(".sub_interest")[0].text
+                print l.select(".sub_retweet")[0].text.encode('utf-8')," | ",
+                print l.select(".sub_interest")[0].text.encode('utf-8')
                 twit['retweet'] = l.select(".sub_retweet")[0].text
             result.append(twit)
             if i >= 1:
