@@ -1,0 +1,176 @@
+python: can't open file 'workspace/SiotAlertServer/util/parser/parser.py': [Errno 2] No such file or directory
+python: can't open file 'workspace/SiotAlertServer/util/parser/parser.py': [Errno 2] No such file or directory
+python: can't open file 'workspace/SiotAlertServer/util/parser/parser.py': [Errno 2] No such file or directory
+current time 2016-09-05 18:16:17.999238
+sleep  2016-09-05 18:17:17.999223
+current time 2016-09-05 18:16:33.014401
+sleep  2016-09-05 18:17:17.999223
+current time 2016-09-05 18:16:48.014614
+sleep  2016-09-05 18:17:17.999223
+current time 2016-09-05 18:17:03.029764
+send alert  2016-09-05 18:17:17.999223
+https://api.telegram.org/bot247143838:AAFwdaGx1QnYCjsh9HjeQjWSDwO6vk1wsD8/getUpdates
+
+https://api.telegram.org/bot247143838:AAFwdaGx1QnYCjsh9HjeQjWSDwO6vk1wsD8/sendMessage?chat_id=202959968&text=1%20%EC%9D%B4%ED%9D%AC%EC%A7%84%0A2%20%ED%98%BC%EC%88%A0%EB%82%A8%EB%85%80%0A3%20%EB%AA%AC%EC%8A%A4%ED%84%B0%0A4%20%EA%B0%95%ED%95%98%EB%8A%98%0A5%20%EA%B5%AC%EB%A5%B4%EB%AF%B8%EA%B7%B8%EB%A6%B0%EB%8B%AC%EB%B9%9B%0A6%20%EC%9B%94%ED%99%94%EB%93%9C%EB%9D%BC%EB%A7%88%0A7%20%EC%9E%84%EC%B0%BD%EC%A0%95%0A8%20%EB%8B%AC%EC%9D%98%20%EC%97%B0%EC%9D%B8%20%EB%B3%B4%EB%B3%B4%EA%B2%BD%EC%8B%AC%20%EB%A0%A4%0A9%20%EC%9E%84%EC%B0%BD%EC%A0%95%20%EB%82%B4%EA%B0%80%20%EC%A0%80%EC%A7%80%EB%A5%B8%20%EC%82%AC%EB%9E%91%0A10%20%ED%95%9C%EA%B5%AD%20%EC%8B%9C%EB%A6%AC%EC%95%84%0A
+{"ok":true,"result":{"message_id":64,"from":{"id":247143838,"first_name":"SiotAlert","username":"SiotAlertBot"},"chat":{"id":202959968,"first_name":"\uc2b9\uc218","type":"private"},"date":1473099562,"text":"1 \uc774\ud76c\uc9c4\n2 \ud63c\uc220\ub0a8\ub140\n3 \ubaac\uc2a4\ud130\n4 \uac15\ud558\ub298\n5 \uad6c\ub974\ubbf8\uadf8\ub9b0\ub2ec\ube5b\n6 \uc6d4\ud654\ub4dc\ub77c\ub9c8\n7 \uc784\ucc3d\uc815\n8 \ub2ec\uc758 \uc5f0\uc778 \ubcf4\ubcf4\uacbd\uc2ec \ub824\n9 \uc784\ucc3d\uc815 \ub0b4\uac00 \uc800\uc9c0\ub978 \uc0ac\ub791\n10 \ud55c\uad6d \uc2dc\ub9ac\uc544"}}
+current time 2016-09-05 18:17:05.408489
+sleep  2016-09-05 18:19:17.999223
+current time 2016-09-05 18:17:20.423629
+sleep  2016-09-05 18:19:17.999223
+current time 2016-09-05 18:17:35.438786
+sleep  2016-09-05 18:19:17.999223
+current time 2016-09-05 18:17:50.444012
+sleep  2016-09-05 18:19:17.999223
+current time 2016-09-05 18:18:05.459188
+sleep  2016-09-05 18:19:17.999223
+current time 2016-09-05 18:18:20.474369
+sleep  2016-09-05 18:19:17.999223
+current time 2016-09-05 18:18:35.489515
+sleep  2016-09-05 18:19:17.999223
+current time 2016-09-05 18:18:50.504756
+sleep  2016-09-05 18:19:17.999223
+current time 2016-09-05 18:19:05.519915
+send alert  2016-09-05 18:19:17.999223
+https://api.telegram.org/bot247143838:AAFwdaGx1QnYCjsh9HjeQjWSDwO6vk1wsD8/getUpdates
+
+https://api.telegram.org/bot247143838:AAFwdaGx1QnYCjsh9HjeQjWSDwO6vk1wsD8/sendMessage?chat_id=202959968&text=1%20%EC%9D%B4%ED%9D%AC%EC%A7%84%0A2%20%ED%98%BC%EC%88%A0%EB%82%A8%EB%85%80%0A3%20%EA%B0%95%ED%95%98%EB%8A%98%0A4%20%EB%AA%AC%EC%8A%A4%ED%84%B0%0A5%20%EA%B5%AC%EB%A5%B4%EB%AF%B8%EA%B7%B8%EB%A6%B0%EB%8B%AC%EB%B9%9B%0A6%20%EC%9E%84%EC%B0%BD%EC%A0%95%0A7%20%EC%9B%94%ED%99%94%EB%93%9C%EB%9D%BC%EB%A7%88%0A8%20%EB%8B%AC%EC%9D%98%20%EC%97%B0%EC%9D%B8%20%EB%B3%B4%EB%B3%B4%EA%B2%BD%EC%8B%AC%20%EB%A0%A4%0A9%20%EC%9E%84%EC%B0%BD%EC%A0%95%20%EB%82%B4%EA%B0%80%20%EC%A0%80%EC%A7%80%EB%A5%B8%20%EC%82%AC%EB%9E%91%0A10%20%ED%95%9C%EA%B5%AD%20%EC%8B%9C%EB%A6%AC%EC%95%84%0A
+{"ok":true,"result":{"message_id":65,"from":{"id":247143838,"first_name":"SiotAlert","username":"SiotAlertBot"},"chat":{"id":202959968,"first_name":"\uc2b9\uc218","type":"private"},"date":1473099685,"text":"1 \uc774\ud76c\uc9c4\n2 \ud63c\uc220\ub0a8\ub140\n3 \uac15\ud558\ub298\n4 \ubaac\uc2a4\ud130\n5 \uad6c\ub974\ubbf8\uadf8\ub9b0\ub2ec\ube5b\n6 \uc784\ucc3d\uc815\n7 \uc6d4\ud654\ub4dc\ub77c\ub9c8\n8 \ub2ec\uc758 \uc5f0\uc778 \ubcf4\ubcf4\uacbd\uc2ec \ub824\n9 \uc784\ucc3d\uc815 \ub0b4\uac00 \uc800\uc9c0\ub978 \uc0ac\ub791\n10 \ud55c\uad6d \uc2dc\ub9ac\uc544"}}
+current time 2016-09-05 18:19:07.842500
+sleep  2016-09-05 18:21:17.999223
+current time 2016-09-05 18:19:22.857698
+sleep  2016-09-05 18:21:17.999223
+current time 2016-09-05 18:19:37.867838
+sleep  2016-09-05 18:21:17.999223
+current time 2016-09-05 18:19:52.882986
+sleep  2016-09-05 18:21:17.999223
+current time 2016-09-05 18:20:07.895528
+sleep  2016-09-05 18:21:17.999223
+current time 2016-09-05 18:20:22.910702
+sleep  2016-09-05 18:21:17.999223
+current time 2016-09-05 18:20:37.923549
+sleep  2016-09-05 18:21:17.999223
+current time 2016-09-05 18:20:52.924620
+sleep  2016-09-05 18:21:17.999223
+current time 2016-09-05 18:21:07.939841
+send alert  2016-09-05 18:21:17.999223
+https://api.telegram.org/bot247143838:AAFwdaGx1QnYCjsh9HjeQjWSDwO6vk1wsD8/getUpdates
+
+https://api.telegram.org/bot247143838:AAFwdaGx1QnYCjsh9HjeQjWSDwO6vk1wsD8/sendMessage?chat_id=202959968&text=1%20%EC%9D%B4%ED%9D%AC%EC%A7%84%0A2%20%ED%98%BC%EC%88%A0%EB%82%A8%EB%85%80%0A3%20%EB%AA%AC%EC%8A%A4%ED%84%B0%0A4%20%EA%B0%95%ED%95%98%EB%8A%98%0A5%20%EA%B5%AC%EB%A5%B4%EB%AF%B8%EA%B7%B8%EB%A6%B0%EB%8B%AC%EB%B9%9B%0A6%20%EC%9E%84%EC%B0%BD%EC%A0%95%0A7%20%EC%9E%84%EC%B0%BD%EC%A0%95%20%EB%82%B4%EA%B0%80%20%EC%A0%80%EC%A7%80%EB%A5%B8%20%EC%82%AC%EB%9E%91%0A8%20%ED%95%9C%EA%B5%AD%20%EC%8B%9C%EB%A6%AC%EC%95%84%0A9%20%EB%8B%AC%EC%9D%98%20%EC%97%B0%EC%9D%B8%20%EB%B3%B4%EB%B3%B4%EA%B2%BD%EC%8B%AC%20%EB%A0%A4%0A10%20%EA%BD%83%EB%86%80%EC%9D%B4%ED%8C%A8%0A
+{"ok":true,"result":{"message_id":66,"from":{"id":247143838,"first_name":"SiotAlert","username":"SiotAlertBot"},"chat":{"id":202959968,"first_name":"\uc2b9\uc218","type":"private"},"date":1473099807,"text":"1 \uc774\ud76c\uc9c4\n2 \ud63c\uc220\ub0a8\ub140\n3 \ubaac\uc2a4\ud130\n4 \uac15\ud558\ub298\n5 \uad6c\ub974\ubbf8\uadf8\ub9b0\ub2ec\ube5b\n6 \uc784\ucc3d\uc815\n7 \uc784\ucc3d\uc815 \ub0b4\uac00 \uc800\uc9c0\ub978 \uc0ac\ub791\n8 \ud55c\uad6d \uc2dc\ub9ac\uc544\n9 \ub2ec\uc758 \uc5f0\uc778 \ubcf4\ubcf4\uacbd\uc2ec \ub824\n10 \uaf43\ub180\uc774\ud328"}}
+current time 2016-09-05 18:21:10.238405
+sleep  2016-09-05 18:23:17.999223
+current time 2016-09-05 18:21:25.253561
+sleep  2016-09-05 18:23:17.999223
+current time 2016-09-05 18:21:40.268745
+sleep  2016-09-05 18:23:17.999223
+current time 2016-09-05 18:21:55.283910
+sleep  2016-09-05 18:23:17.999223
+current time 2016-09-05 18:22:10.285908
+sleep  2016-09-05 18:23:17.999223
+current time 2016-09-05 18:22:25.301091
+sleep  2016-09-05 18:23:17.999223
+current time 2016-09-05 18:22:40.316245
+sleep  2016-09-05 18:23:17.999223
+current time 2016-09-05 18:22:55.331440
+sleep  2016-09-05 18:23:17.999223
+current time 2016-09-05 18:23:10.346586
+send alert  2016-09-05 18:23:17.999223
+https://api.telegram.org/bot247143838:AAFwdaGx1QnYCjsh9HjeQjWSDwO6vk1wsD8/getUpdates
+
+https://api.telegram.org/bot247143838:AAFwdaGx1QnYCjsh9HjeQjWSDwO6vk1wsD8/sendMessage?chat_id=202959968&text=1%20%EC%9D%B4%ED%9D%AC%EC%A7%84%0A2%20%ED%98%BC%EC%88%A0%EB%82%A8%EB%85%80%0A3%20%EB%AA%AC%EC%8A%A4%ED%84%B0%0A4%20%EA%B0%95%ED%95%98%EB%8A%98%0A5%20%EA%B5%AC%EB%A5%B4%EB%AF%B8%EA%B7%B8%EB%A6%B0%EB%8B%AC%EB%B9%9B%0A6%20%EC%9E%84%EC%B0%BD%EC%A0%95%0A7%20%EC%9E%84%EC%B0%BD%EC%A0%95%20%EB%82%B4%EA%B0%80%20%EC%A0%80%EC%A7%80%EB%A5%B8%20%EC%82%AC%EB%9E%91%0A8%20%EB%8B%AC%EC%9D%98%20%EC%97%B0%EC%9D%B8%20%EB%B3%B4%EB%B3%B4%EA%B2%BD%EC%8B%AC%20%EB%A0%A4%0A9%20%ED%95%9C%EA%B5%AD%20%EC%8B%9C%EB%A6%AC%EC%95%84%0A10%20%EA%BD%83%EB%86%80%EC%9D%B4%ED%8C%A8%0A
+{"ok":true,"result":{"message_id":67,"from":{"id":247143838,"first_name":"SiotAlert","username":"SiotAlertBot"},"chat":{"id":202959968,"first_name":"\uc2b9\uc218","type":"private"},"date":1473099929,"text":"1 \uc774\ud76c\uc9c4\n2 \ud63c\uc220\ub0a8\ub140\n3 \ubaac\uc2a4\ud130\n4 \uac15\ud558\ub298\n5 \uad6c\ub974\ubbf8\uadf8\ub9b0\ub2ec\ube5b\n6 \uc784\ucc3d\uc815\n7 \uc784\ucc3d\uc815 \ub0b4\uac00 \uc800\uc9c0\ub978 \uc0ac\ub791\n8 \ub2ec\uc758 \uc5f0\uc778 \ubcf4\ubcf4\uacbd\uc2ec \ub824\n9 \ud55c\uad6d \uc2dc\ub9ac\uc544\n10 \uaf43\ub180\uc774\ud328"}}
+current time 2016-09-05 18:23:12.566966
+sleep  2016-09-05 18:25:17.999223
+current time 2016-09-05 18:23:27.582141
+sleep  2016-09-05 18:25:17.999223
+current time 2016-09-05 18:23:42.597313
+sleep  2016-09-05 18:25:17.999223
+current time 2016-09-05 18:23:57.611018
+sleep  2016-09-05 18:25:17.999223
+current time 2016-09-05 18:24:12.626236
+sleep  2016-09-05 18:25:17.999223
+current time 2016-09-05 18:24:27.641405
+sleep  2016-09-05 18:25:17.999223
+current time 2016-09-05 18:24:42.656558
+sleep  2016-09-05 18:25:17.999223
+current time 2016-09-05 18:24:57.671763
+sleep  2016-09-05 18:25:17.999223
+current time 2016-09-05 18:25:12.686905
+send alert  2016-09-05 18:25:17.999223
+https://api.telegram.org/bot247143838:AAFwdaGx1QnYCjsh9HjeQjWSDwO6vk1wsD8/getUpdates
+
+https://api.telegram.org/bot247143838:AAFwdaGx1QnYCjsh9HjeQjWSDwO6vk1wsD8/sendMessage?chat_id=202959968&text=1%20%EC%9D%B4%ED%9D%AC%EC%A7%84%0A2%20%ED%98%BC%EC%88%A0%EB%82%A8%EB%85%80%0A3%20%EB%AA%AC%EC%8A%A4%ED%84%B0%0A4%20%EA%B0%95%ED%95%98%EB%8A%98%0A5%20%EA%B5%AC%EB%A5%B4%EB%AF%B8%EA%B7%B8%EB%A6%B0%EB%8B%AC%EB%B9%9B%0A6%20%EC%9E%84%EC%B0%BD%EC%A0%95%0A7%20%EC%9E%84%EC%B0%BD%EC%A0%95%20%EB%82%B4%EA%B0%80%20%EC%A0%80%EC%A7%80%EB%A5%B8%20%EC%82%AC%EB%9E%91%0A8%20%EC%9D%B4%EC%A4%80%EA%B8%B0%0A9%20%ED%95%9C%EA%B5%AD%20%EC%8B%9C%EB%A6%AC%EC%95%84%0A10%20%EA%BD%83%EB%86%80%EC%9D%B4%ED%8C%A8%0A
+{"ok":true,"result":{"message_id":68,"from":{"id":247143838,"first_name":"SiotAlert","username":"SiotAlertBot"},"chat":{"id":202959968,"first_name":"\uc2b9\uc218","type":"private"},"date":1473100052,"text":"1 \uc774\ud76c\uc9c4\n2 \ud63c\uc220\ub0a8\ub140\n3 \ubaac\uc2a4\ud130\n4 \uac15\ud558\ub298\n5 \uad6c\ub974\ubbf8\uadf8\ub9b0\ub2ec\ube5b\n6 \uc784\ucc3d\uc815\n7 \uc784\ucc3d\uc815 \ub0b4\uac00 \uc800\uc9c0\ub978 \uc0ac\ub791\n8 \uc774\uc900\uae30\n9 \ud55c\uad6d \uc2dc\ub9ac\uc544\n10 \uaf43\ub180\uc774\ud328"}}
+current time 2016-09-05 18:25:14.942603
+sleep  2016-09-05 18:27:17.999223
+current time 2016-09-05 18:25:29.957774
+sleep  2016-09-05 18:27:17.999223
+current time 2016-09-05 18:25:44.972963
+sleep  2016-09-05 18:27:17.999223
+current time 2016-09-05 18:25:59.988114
+sleep  2016-09-05 18:27:17.999223
+current time 2016-09-05 18:26:14.997334
+sleep  2016-09-05 18:27:17.999223
+current time 2016-09-05 18:26:30.012504
+sleep  2016-09-05 18:27:17.999223
+current time 2016-09-05 18:26:45.027673
+sleep  2016-09-05 18:27:17.999223
+current time 2016-09-05 18:27:00.042880
+sleep  2016-09-05 18:27:17.999223
+current time 2016-09-05 18:27:15.055546
+send alert  2016-09-05 18:27:17.999223
+https://api.telegram.org/bot247143838:AAFwdaGx1QnYCjsh9HjeQjWSDwO6vk1wsD8/getUpdates
+
+https://api.telegram.org/bot247143838:AAFwdaGx1QnYCjsh9HjeQjWSDwO6vk1wsD8/sendMessage?chat_id=202959968&text=1%20%EC%9D%B4%ED%9D%AC%EC%A7%84%0A2%20%ED%98%BC%EC%88%A0%EB%82%A8%EB%85%80%0A3%20%EA%B0%95%ED%95%98%EB%8A%98%0A4%20%EB%AA%AC%EC%8A%A4%ED%84%B0%0A5%20%EA%B5%AC%EB%A5%B4%EB%AF%B8%EA%B7%B8%EB%A6%B0%EB%8B%AC%EB%B9%9B%0A6%20%EC%9D%B4%EC%A4%80%EA%B8%B0%0A7%20%EC%9E%84%EC%B0%BD%EC%A0%95%0A8%20%EC%9E%84%EC%B0%BD%EC%A0%95%20%EB%82%B4%EA%B0%80%20%EC%A0%80%EC%A7%80%EB%A5%B8%20%EC%82%AC%EB%9E%91%0A9%20%ED%95%9C%EA%B5%AD%20%EC%8B%9C%EB%A6%AC%EC%95%84%0A10%20%EA%BD%83%EB%86%80%EC%9D%B4%ED%8C%A8%0A
+{"ok":true,"result":{"message_id":69,"from":{"id":247143838,"first_name":"SiotAlert","username":"SiotAlertBot"},"chat":{"id":202959968,"first_name":"\uc2b9\uc218","type":"private"},"date":1473100174,"text":"1 \uc774\ud76c\uc9c4\n2 \ud63c\uc220\ub0a8\ub140\n3 \uac15\ud558\ub298\n4 \ubaac\uc2a4\ud130\n5 \uad6c\ub974\ubbf8\uadf8\ub9b0\ub2ec\ube5b\n6 \uc774\uc900\uae30\n7 \uc784\ucc3d\uc815\n8 \uc784\ucc3d\uc815 \ub0b4\uac00 \uc800\uc9c0\ub978 \uc0ac\ub791\n9 \ud55c\uad6d \uc2dc\ub9ac\uc544\n10 \uaf43\ub180\uc774\ud328"}}
+current time 2016-09-05 18:27:17.403625
+sleep  2016-09-05 18:29:17.999223
+current time 2016-09-05 18:27:32.418767
+sleep  2016-09-05 18:29:17.999223
+current time 2016-09-05 18:27:47.433962
+sleep  2016-09-05 18:29:17.999223
+current time 2016-09-05 18:28:02.449103
+sleep  2016-09-05 18:29:17.999223
+current time 2016-09-05 18:28:17.457200
+sleep  2016-09-05 18:29:17.999223
+current time 2016-09-05 18:28:32.472393
+sleep  2016-09-05 18:29:17.999223
+current time 2016-09-05 18:28:47.487616
+sleep  2016-09-05 18:29:17.999223
+current time 2016-09-05 18:29:02.502801
+sleep  2016-09-05 18:29:17.999223
+current time 2016-09-05 18:29:17.518014
+send alert  2016-09-05 18:29:17.999223
+https://api.telegram.org/bot247143838:AAFwdaGx1QnYCjsh9HjeQjWSDwO6vk1wsD8/getUpdates
+
+https://api.telegram.org/bot247143838:AAFwdaGx1QnYCjsh9HjeQjWSDwO6vk1wsD8/sendMessage?chat_id=202959968&text=1%20%EC%9D%B4%ED%9D%AC%EC%A7%84%0A2%20%ED%98%BC%EC%88%A0%EB%82%A8%EB%85%80%0A3%20%EB%AA%AC%EC%8A%A4%ED%84%B0%0A4%20%EA%B5%AC%EB%A5%B4%EB%AF%B8%EA%B7%B8%EB%A6%B0%EB%8B%AC%EB%B9%9B%0A5%20%EC%9D%B4%EC%A4%80%EA%B8%B0%0A6%20%EC%9E%84%EC%B0%BD%EC%A0%95%0A7%20%EC%9E%84%EC%B0%BD%EC%A0%95%20%EB%82%B4%EA%B0%80%20%EC%A0%80%EC%A7%80%EB%A5%B8%20%EC%82%AC%EB%9E%91%0A8%20%ED%95%9C%EA%B5%AD%20%EC%8B%9C%EB%A6%AC%EC%95%84%0A9%20%EA%BD%83%EB%86%80%EC%9D%B4%ED%8C%A8%0A10%20%EB%8B%AC%EC%9D%98%20%EC%97%B0%EC%9D%B8%20%EB%B3%B4%EB%B3%B4%EA%B2%BD%EC%8B%AC%20%EB%A0%A4%0A
+{"ok":true,"result":{"message_id":70,"from":{"id":247143838,"first_name":"SiotAlert","username":"SiotAlertBot"},"chat":{"id":202959968,"first_name":"\uc2b9\uc218","type":"private"},"date":1473100297,"text":"1 \uc774\ud76c\uc9c4\n2 \ud63c\uc220\ub0a8\ub140\n3 \ubaac\uc2a4\ud130\n4 \uad6c\ub974\ubbf8\uadf8\ub9b0\ub2ec\ube5b\n5 \uc774\uc900\uae30\n6 \uc784\ucc3d\uc815\n7 \uc784\ucc3d\uc815 \ub0b4\uac00 \uc800\uc9c0\ub978 \uc0ac\ub791\n8 \ud55c\uad6d \uc2dc\ub9ac\uc544\n9 \uaf43\ub180\uc774\ud328\n10 \ub2ec\uc758 \uc5f0\uc778 \ubcf4\ubcf4\uacbd\uc2ec \ub824"}}
+current time 2016-09-05 18:29:19.851077
+sleep  2016-09-05 18:31:17.999223
+current time 2016-09-05 18:29:34.866245
+sleep  2016-09-05 18:31:17.999223
+current time 2016-09-05 18:29:49.881388
+sleep  2016-09-05 18:31:17.999223
+current time 2016-09-05 18:30:04.884677
+sleep  2016-09-05 18:31:17.999223
+break
+Traceback (most recent call last):
+  File "util/parser/parser.py", line 1, in <module>
+    import json
+  File "/usr/lib/python2.7/json/__init__.py", line 108, in <module>
+    from .decoder import JSONDecoder
+  File "/usr/lib/python2.7/json/decoder.py", line 5, in <module>
+    import struct
+  File "/usr/lib/python2.7/struct.py", line 1, in <module>
+    from _struct import *
+ImportError: No module named _struct
+Traceback (most recent call last):
+  File "util/parser/parser.py", line 1, in <module>
+    import json
+  File "/usr/lib/python2.7/json/__init__.py", line 108, in <module>
+    from .decoder import JSONDecoder
+  File "/usr/lib/python2.7/json/decoder.py", line 5, in <module>
+    import struct
+  File "/usr/lib/python2.7/struct.py", line 1, in <module>
+    from _struct import *
+ImportError: No module named _struct

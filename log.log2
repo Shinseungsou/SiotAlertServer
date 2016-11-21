@@ -1,0 +1,57 @@
+getdb <mysql.connector.connection.MySQLConnection object at 0x7f2c01eaab90>
+getdb <mysql.connector.connection.MySQLConnection object at 0x7f2c01eaadd0>
+check :  False False 11
+deep sleep  2016-11-20 19:11:48.903393  || [ 1 ], [ 10 ]
+i can sleep  19 minutes
+getdb <mysql.connector.connection.MySQLConnection object at 0x7f2c01eaaed0>
+check :  False False 30
+deep sleep  2016-11-20 19:30:49.001751  || [ 1 ], [ 10 ]
+i can sleep  30 minutes
+getdb <mysql.connector.connection.MySQLConnection object at 0x7f2c01eaadd0>
+check :  False True 0
+deep sleep  2016-11-20 20:00:49.091307  || [ 1 ], [ 10 ]
+i can sleep  30 minutes
+getdb <mysql.connector.connection.MySQLConnection object at 0x7f2c01eaaed0>
+check :  False False 30
+deep sleep  2016-11-20 20:30:49.195037  || [ 1 ], [ 10 ]
+i can sleep  30 minutes
+getdb <mysql.connector.connection.MySQLConnection object at 0x7f2c01eaadd0>
+check :  False True 0
+deep sleep  2016-11-20 21:00:49.235052  || [ 1 ], [ 10 ]
+i can sleep  30 minutes
+getdb <mysql.connector.connection.MySQLConnection object at 0x7f2c01eaaed0>
+check :  False False 30
+deep sleep  2016-11-20 21:30:49.260770  || [ 1 ], [ 10 ]
+i can sleep  30 minutes
+getdb <mysql.connector.connection.MySQLConnection object at 0x7f2c01eaadd0>
+check :  False True 0
+deep sleep  2016-11-20 22:00:49.282711  || [ 1 ], [ 10 ]
+i can sleep  30 minutes
+getdb <mysql.connector.connection.MySQLConnection object at 0x7f2c01eaaed0>
+check :  False False 30
+deep sleep  2016-11-20 22:30:49.328767  || [ 1 ], [ 10 ]
+i can sleep  30 minutes
+getdb <mysql.connector.connection.MySQLConnection object at 0x7f2c01eaadd0>
+check :  False True 0
+deep sleep  2016-11-20 23:00:49.420459  || [ 1 ], [ 10 ]
+i can sleep  30 minutes
+getdb <mysql.connector.connection.MySQLConnection object at 0x7f2c01eaaed0>
+check :  False False 30
+deep sleep  2016-11-20 23:30:49.432330  || [ 1 ], [ 10 ]
+i can sleep  30 minutes
+getdb <mysql.connector.connection.MySQLConnection object at 0x7f2c01eaadd0>
+check :  False True 0
+deep sleep  2016-11-21 00:00:49.460275  || [ 1 ], [ 10 ]
+i can sleep  30 minutes
+getdb <mysql.connector.connection.MySQLConnection object at 0x7f2c01eaaed0>
+check :  False False 30
+deep sleep  2016-11-21 00:30:49.563260  || [ 1 ], [ 10 ]
+i can sleep  30 minutes
+getdb <mysql.connector.connection.MySQLConnection object at 0x7f2c01eaadd0>
+check :  True True 0
+send alert  2016-11-21 01:00:49.576760
+https://api.telegram.org/bot247143838:AAFwdaGx1QnYCjsh9HjeQjWSDwO6vk1wsD8/getUpdates
+1 {'group_id': 1, 'user_id': 202959968}  |  True  | 
+https://api.telegram.org/bot247143838:AAFwdaGx1QnYCjsh9HjeQjWSDwO6vk1wsD8/sendMessage?chat_id=202959968&text=1%0A1%20%EA%B9%80%EC%97%B0%EC%95%84%20%EB%B0%95%EA%B7%BC%ED%98%9C%0A2%20%EC%96%91%ED%95%99%EC%84%A0%0A3%20%EC%86%90%EC%97%B0%EC%9E%AC%0A4%20%EC%9D%B4%EB%AA%85%EB%B0%95%0A5%20%EA%B9%80%EC%97%B0%EC%95%84%0A6%20%EA%B9%80%EC%A7%84%ED%83%9C%0A7%20%EC%BD%94%EC%8A%A4%EB%8B%A5%0A8%20%EB%B0%95%ED%83%9C%ED%99%98%0A9%20%EC%9E%A5%EC%8B%9C%ED%98%B8%0A10%20%ED%83%84%ED%95%B5%0A
+{"ok":true,"result":{"message_id":521,"from":{"id":247143838,"first_name":"SiotAlert","username":"SiotAlertBot"},"chat":{"id":202959968,"first_name":"\uc2b9\uc218","type":"private"},"date":1479690226,"text":"1\n1 \uae40\uc5f0\uc544 \ubc15\uadfc\ud61c\n2 \uc591\ud559\uc120\n3 \uc190\uc5f0\uc7ac\n4 \uc774\uba85\ubc15\n5 \uae40\uc5f0\uc544\n6 \uae40\uc9c4\ud0dc\n7 \ucf54\uc2a4\ub2e5\n8 \ubc15\ud0dc\ud658\n9 \uc7a5\uc2dc\ud638\n10 \ud0c4\ud575"}}
+i can sleep  30 minutes

@@ -1,0 +1,5 @@
+getdb <mysql.connector.connection.MySQLConnection object at 0x7fb67d2a9b90>
+getdb <mysql.connector.connection.MySQLConnection object at 0x7fb67d2a9dd0>
+check :  False False 16
+deep sleep  2016-11-21 20:16:55.500119  || [ 1 ], [ 10 ]
+i can sleep  14 minutes
