@@ -9,10 +9,10 @@ from bs4 import BeautifulSoup
 import private
 import config
 
-test = True
-print_news = False
-print_db = False
-print_alert = False
+test = False
+print_news = True
+print_db = True
+print_alert = True
 
 
 start_date = datetime(2016, 11, 11, 02, 0)
