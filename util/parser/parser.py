@@ -16,10 +16,10 @@ print_alert = True
 
 
 start_date = datetime(2016, 11, 11, 02, 0)
-end_date = datetime(2016, 11, 22, 22, 24)
+end_date = datetime(2016, 11, 30, 22, 24)
 
 startHour = 10
-endHour = 19
+endHour = 20
 
 # TIMEZONE
 startHour -= 9
@@ -35,6 +35,7 @@ def parse():
     select = soup.select("ol#realrank > li")
     result = dict()
     news = []
+    twit = []
     for rank in select:
         if len(rank.attrs) < 3:
             if print_news:
@@ -53,8 +54,9 @@ def parse():
             result[rank.attrs["value"]] = rank.a['title']
             if(int(rank.attrs["value"]) <= 2):
                 news.append(parseNews(rank.a.attrs["href"]))
+                twit.append(parseTweet(rank.a['title']))
 
-    return result, news
+    return result, news, twit
 
 def parseNews(url):
     r = urllib2.urlopen(url)
@@ -74,25 +76,41 @@ def parseNews(url):
     # print select.encode('utf-8')
     return select
 
-
+'''
+ [timestamp] text - retweet or like
+'''
 def parseTweet(keyword):
+    result = []
     keyword = urllib.quote(keyword.encode('utf-8'))
-    url = "https://search.naver.com/search.naver?where=realtime&sm=tab_jum&ie=utf8&query=" + keyword
-    r = urllib2.urlopen(url)
-    soup = BeautifulSoup(r, "html.parser", from_encoding='utf-8')
-    for l in soup.select("div.rt_wrap > div > ul > li > dl"):
-        print l.select("span.user_name")[0].text, " - ",
-        print l.select("dd:nth-of-type(2)")[0].text
-        print l.select("._timeinfo")[0].text, " | ",
-
-        if len(l.select(".sub_reply")) > 0:
-            print l.select(".sub_reply")[0].text," | ",
-        if len(l.select(".sub_like")) > 0:
-            print l.select(".sub_like")[0].text," | ",
-            print l.select(".sub_dis")[0].text
-        elif len(l.select(".sub_retweet")) > 0:
-            print l.select(".sub_retweet")[0].text," | ",
-            print l.select(".sub_interest")[0].text
+    for best in range(0, 2):
+        url = "https://search.naver.com/search.naver?where=realtime&ie=utf8&sm=tab_srt&section=0&best="+str(best)+"&mson=0&query=" + keyword
+        print url, best
+        r = urllib2.urlopen(url)
+        soup = BeautifulSoup(r, "html.parser", from_encoding='utf-8')
+        i = 0
+        for l in soup.select("div.rt_wrap > div > ul > li > dl"):
+            twit = dict()
+            print l.select("span.user_name")[0].text, " - ",
+            twit['name'] = l.select("span.user_name")[0].text
+            print l.select("dd:nth-of-type(2)")[0].text
+            twit['text'] = l.select("dd:nth-of-type(2)")[0].text
+            print l.select("._timeinfo")[0].text, " | ",
+            twit['time'] = l.select("._timeinfo")[0].text
+            if len(l.select(".sub_reply")) > 0:
+                print l.select(".sub_reply")[0].text," | ",
+            if len(l.select(".sub_like")) > 0:
+                print l.select(".sub_like")[0].text," | ",
+                twit['retweet'] = l.select(".sub_like")[0].text
+                print l.select(".sub_dis")[0].text
+            elif len(l.select(".sub_retweet")) > 0:
+                print l.select(".sub_retweet")[0].text," | ",
+                print l.select(".sub_interest")[0].text
+                twit['retweet'] = l.select(".sub_retweet")[0].text
+            result.append(twit)
+            if i >= 1:
+                break
+            i += 1
+    return result
 
 
 people12 = []
@@ -104,7 +122,7 @@ isodd6 = [0, 1]
 pgroup = []
 
 
-def insert_news(db_connect, rank, news):
+def insert_news(db_connect, rank, news, twit):
     cursor = db_connect.cursor()
     add_rank = ("insert into ranks"
                 "(rank0, up0, rank0_title, rank0_contents, rank1, up1, rank1_title, rank1_contents, "
@@ -149,6 +167,48 @@ def insert_news(db_connect, rank, news):
         print "------"
     cursor.execute(add_rank, news_rank)
     lastrow_id = cursor.lastrowid
+    insert_twit = ('insert into twit (rank_id, rank, '
+                   'twit1_0_text, twit1_0_retweet, twit1_0_time, twit1_1_text, twit1_1_retweet, twit1_1_time, '
+                   'twit2_0_text, twit2_0_retweet, twit2_0_time, twit2_1_text, twit2_1_retweet, twit2_1_time) '
+                   'value (%s, %s, '
+                   '%s, %s, %s, %s, %s, %s, '
+                   '%s, %s, %s, %s, %s, %s)')
+    new_twit = (
+        lastrow_id,
+        0,
+        twit[0][0]['text'],
+        twit[0][0]['retweet'],
+        twit[0][0]['time'],
+        twit[0][1]['text'],
+        twit[0][1]['retweet'],
+        twit[0][1]['time'],
+        twit[0][2]['text'],
+        twit[0][2]['retweet'],
+        twit[0][2]['time'],
+        twit[0][3]['text'],
+        twit[0][3]['retweet'],
+        twit[0][3]['time']
+    )
+    cursor.execute(insert_twit, new_twit)
+    new_twit = (
+        lastrow_id,
+        1,
+        twit[1][0]['text'],
+        twit[1][0]['retweet'],
+        twit[1][0]['time'],
+        twit[1][1]['text'],
+        twit[1][1]['retweet'],
+        twit[1][1]['time'],
+        twit[1][2]['text'],
+        twit[1][2]['retweet'],
+        twit[1][2]['time'],
+        twit[1][3]['text'],
+        twit[1][3]['retweet'],
+        twit[1][3]['time']
+    )
+    cursor.execute(insert_twit, new_twit)
+    twit_id = cursor.lastrowid
+
     db_connect.commit()
     cursor.close()
     return lastrow_id
@@ -202,23 +262,26 @@ def get_group(db_connect):
     return group
 
 
-def get_text(rank, news, type):
+def get_text(rank, news, twit, type):
     text = ""
     if type == 1:
         for r in range(1, 11):
+            text += ' ['+rank['up'+str(r)] + '] '
             text += str(r)+' '+rank[str(r)] + '\n'
     elif type == 2:
         for r in range(1, 11):
-            text += str(r)+' '+rank[str(r)]
-            text += ' ['+rank['up'+str(r)] + ']\n'
+            text += str(r)+' '+rank[str(r)] + '\n'
+            if r <= 2:
+                text += ' [' + twit[r-1][0]['time'] + '] ' + twit[r-1][0]['text'] + ' - ' + twit[r-1][0]['retweet'] + '\n'
+                text += ' [' + twit[r-1][1]['time'] + '] ' + twit[r-1][1]['text'] + ' - ' + twit[r-1][1]['retweet'] + '\n'
+                text += ' [' + twit[r-1][2]['time'] + '] ' + twit[r-1][2]['text'] + ' - ' + twit[r-1][2]['retweet'] + '\n'
+                text += ' [' + twit[r-1][3]['time'] + '] ' + twit[r-1][3]['text'] + ' - ' + twit[r-1][3]['retweet'] + '\n'
     elif type == 3:
         for r in range(1, 11):
             text += str(r)+' '+rank[str(r)]
-            text += ' ['+rank['up'+str(r)] + ']'
+            text += ' ['+rank['up'+str(r)] + ']\n'
             if r <= 2:
-                text += '\n' + news[r-1]['title'] + " - " + news[r-1]['contents'] + '\n'
-            else:
-                text += '\n'
+                text += news[r-1]['title'] + " - " + news[r-1]['contents'] + '\n'
     return text
 
 def sendAlert(db_connect, now):
@@ -231,8 +294,8 @@ def sendAlert(db_connect, now):
     chat_response = urllib2.urlopen(get_chat).read()
     chat_list = json.loads(chat_response)
     # chat_id = chat_list['result'][1]['message']['chat']['id']
-    rank, news = parse()
-    insert_news(db_connect, rank, news)
+    rank, news, twit = parse()
+    insert_news(db_connect, rank, news, twit)
     if print_alert:
         print "rank"
         print rank
@@ -258,7 +321,7 @@ def sendAlert(db_connect, now):
         cursor.close()
         return
 
-    text = get_text(rank, news, 3)
+    text = get_text(rank, news, twit, 3)
     raw_text = text
     if print_alert:
         print
@@ -276,7 +339,7 @@ def sendAlert(db_connect, now):
 
         if group_id and group_id >= 0:
             group_type = pgroup[int(group_id) - 1]['type']
-            text = get_text(rank, news, group_type)
+            text = get_text(rank, news, twit, group_type)
             group_interval = pgroup[int(group_id) - 1]['interval']
             print group_id, i, ' | ', (compare_time(group_interval, now)), ' | '
             if (compare_time(group_interval, now)):
@@ -296,7 +359,8 @@ def contains_user(user, users):
 def compare_time(interval, time):
     min = interval % 1
     hour = interval / 1
-    rate = time.hour - startHour + (startHour % 2)
+    rate = time.hour - startHour# + (startHour % 2)
+    print rate % hour == 0, min == 0, rate % interval == 0
     if rate % hour == 0 and (min == 0 or rate % interval == 0):
         return True
     return False
@@ -323,8 +387,8 @@ def timer():
         if now > end_date and now < start_date:
             print start_date, ' : ', now, ':', end_date, "bye", now - end_date
             break
-        print 'check : ', startHour <= now.hour < endHour, (now.minute in [0]), now.minute
-        if startHour <= now.hour < endHour and (now.minute in [0]):
+        print 'check : ', startHour <= now.hour <= endHour, (now.minute in [0]), now.minute
+        if startHour <= now.hour <= endHour and (now.minute in [0]):
             print "send alert ", now
             sendAlert(db_connect, now)
         else:
@@ -344,38 +408,86 @@ def timer():
         #     time.sleep(sleep_sec)
 
 
-def run():
-    db_connect = config.mjudb().getDB()
-    pgroup = get_group(db_connect)
-    db_connect.close()
-    # print "connect"
-    #
+def run(db_connect):
     timer()
-    # parse()
 
     db_connect.close()
+
+
+def test_parser():
+    rank, news, twit = parse()
+    print get_text(rank, news, twit, 1)
+    print get_text(rank, news, twit, 2)
+    print get_text(rank, news, twit, 3)
+
+
+def test_sendmsg(db_connect):
+    t = datetime(2016, 11, 11, 01, 0)
+    print '----------------'
+    print compare_time(1, t)
+    print compare_time(2, t)
+    # sendAlert(db_connect, t)
+    t = datetime(2016, 11, 11, 02, 0)
+    print '----------------'
+    print compare_time(1, t)
+    print compare_time(2, t)
+    # sendAlert(db_connect, t)
+    t = datetime(2016, 11, 11, 03, 0)
+    print '----------------'
+    print compare_time(1, t)
+    print compare_time(2, t)
+    # sendAlert(db_connect, t)
+    t = datetime(2016, 11, 11, 04, 0)
+    print '----------------'
+    print compare_time(1, t)
+    print compare_time(2, t)
+    # sendAlert(db_connect, t)
+    t = datetime(2016, 11, 11, 05, 0)
+    print '----------------'
+    print compare_time(1, t)
+    print compare_time(2, t)
+    # sendAlert(db_connect, t)
+    t = datetime(2016, 11, 11, 06, 0)
+    print '----------------'
+    print compare_time(1, t)
+    print compare_time(2, t)
+    # sendAlert(db_connect, t)
+    t = datetime(2016, 11, 11, 07, 0)
+    print '----------------'
+    print compare_time(1, t)
+    print compare_time(2, t)
+    # sendAlert(db_connect, t)
+    t = datetime(2016, 11, 11, 8, 0)
+    print '----------------'
+    print compare_time(1, t)
+    print compare_time(2, t)
+    # sendAlert(db_connect, t)
+    t = datetime(2016, 11, 11, 9, 0)
+    print '----------------'
+    print compare_time(1, t)
+    print compare_time(2, t)
+    # sendAlert(db_connect, t)
+    t = datetime(2016, 11, 11, 10, 0)
+    print '----------------'
+    print compare_time(1, t)
+    print compare_time(2, t)
+    # sendAlert(db_connect, t)
+    t = datetime(2016, 11, 11, 11, 0)
+    print '----------------'
+    print compare_time(1, t)
+    print compare_time(2, t)
+    # sendAlert(db_connect, t)
+
+    db_connect.close()
+
 
 if __name__ == "__main__":
-    # run()
-
-    parseTweet("jtbc")
-
-    # t = datetime(2016, 11, 11, 04, 0)
-    # print compare_time(1, t)
-    # print compare_time(2, t)
-    # sendAlert(t)
-    # t = datetime(2016, 11, 11, 05, 0)
-    # print compare_time(1, t)
-    # print compare_time(2, t)
-    # sendAlert(t)
-    # t = datetime(2016, 11, 11, 06, 0)
-    # print compare_time(1, t)
-    # print compare_time(2, t)
-    # sendAlert(t)
-    # t = datetime(2016, 11, 11, 07, 0)
-    # print compare_time(1, t)
-    # print compare_time(2, t)
-    # sendAlert(t)
+    db_connect = config.mjudb().getDB()
+    pgroup = get_group(db_connect)
+    run(db_connect)
+    # test_sendmsg(db_connect)
+    # parseTweet("jtbc")
+    # db_connect.close()
     # sendAlert(datetime.now())
     # hh = [3, 7, 31, 59, 60, 30, 0] #27, 23, 29, 1, 0, 0, 0
     # div = 30
@@ -383,8 +495,6 @@ if __name__ == "__main__":
     # for i in hh:
     #     print defa - i % div,
     # print end_date - start_date, datetime.now()-start_date, (start_date - datetime.now()).total_seconds() < 0
-
-
 
 
 #
