@@ -74,6 +74,27 @@ def parseNews(url):
     # print select.encode('utf-8')
     return select
 
+
+def parseTweet(keyword):
+    keyword = urllib.quote(keyword.encode('utf-8'))
+    url = "https://search.naver.com/search.naver?where=realtime&sm=tab_jum&ie=utf8&query=" + keyword
+    r = urllib2.urlopen(url)
+    soup = BeautifulSoup(r, "html.parser", from_encoding='utf-8')
+    for l in soup.select("div.rt_wrap > div > ul > li > dl"):
+        print l.select("span.user_name")[0].text, " - ",
+        print l.select("dd:nth-of-type(2)")[0].text
+        print l.select("._timeinfo")[0].text, " | ",
+
+        if len(l.select(".sub_reply")) > 0:
+            print l.select(".sub_reply")[0].text," | ",
+        if len(l.select(".sub_like")) > 0:
+            print l.select(".sub_like")[0].text," | ",
+            print l.select(".sub_dis")[0].text
+        elif len(l.select(".sub_retweet")) > 0:
+            print l.select(".sub_retweet")[0].text," | ",
+            print l.select(".sub_interest")[0].text
+
+
 people12 = []
 minute12 = []
 people6 = []
@@ -127,8 +148,10 @@ def insert_news(db_connect, rank, news):
         print news_rank
         print "------"
     cursor.execute(add_rank, news_rank)
+    lastrow_id = cursor.lastrowid
     db_connect.commit()
     cursor.close()
+    return lastrow_id
 
 
 def get_users(db_connect):
@@ -145,6 +168,7 @@ def get_users(db_connect):
         users.append(temp_user)
     cursor.close()
     return users
+
 
 def put_users(db_connect, users):
     cursor = db_connect.cursor()
@@ -320,7 +344,7 @@ def timer():
         #     time.sleep(sleep_sec)
 
 
-if __name__ == "__main__":
+def run():
     db_connect = config.mjudb().getDB()
     pgroup = get_group(db_connect)
     db_connect.close()
@@ -330,6 +354,12 @@ if __name__ == "__main__":
     # parse()
 
     db_connect.close()
+
+if __name__ == "__main__":
+    # run()
+
+    parseTweet("jtbc")
+
     # t = datetime(2016, 11, 11, 04, 0)
     # print compare_time(1, t)
     # print compare_time(2, t)
