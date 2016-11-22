@@ -110,6 +110,14 @@ def parseTweet(keyword):
             if i >= 1:
                 break
             i += 1
+        while len(result) < 4:
+            twit = dict()
+            twit['name'] = ""
+            twit['text'] = ""
+            twit['time'] = ""
+            twit['retweet'] = ""
+            result.append(twit)
+
     return result
 
 
