@@ -292,25 +292,15 @@ def get_text(rank, news, twit, type):
                 text += news[r-1]['title'] + " - " + news[r-1]['contents'] + '\n'
     return text
 
-def sendAlert(db_connect, now):
+def userstep(db_connect):
     key = private.key
     get_chat = 'https://api.telegram.org/bot' + key + '/getUpdates'
 
-    cursor = db_connect.cursor()
 
     print get_chat
     chat_response = urllib2.urlopen(get_chat).read()
     chat_list = json.loads(chat_response)
-    # chat_id = chat_list['result'][1]['message']['chat']['id']
-    rank, news, twit = parse()
-    insert_news(db_connect, rank, news, twit)
-    if print_alert:
-        print "rank"
-        print rank
-        print news
-        print 'news'
-        for i in news:
-            print i
+
 
     users = get_users(db_connect)
     new_users = []
@@ -322,11 +312,28 @@ def sendAlert(db_connect, now):
         print new_users
     if not test and len(new_users) > 0:
         put_users(db_connect, new_users)
+
+    return users
+
+def sendAlert(db_connect, now):
+    cursor = db_connect.cursor()
+
+    users = userstep(db_connect)
+
+    # chat_id = chat_list['result'][1]['message']['chat']['id']
+    rank, news, twit = parse()
+    insert_news(db_connect, rank, news, twit)
+    if print_alert:
+        print "rank"
+        print rank
+        print news
+        print 'news'
+        for i in news:
+            print i
+
     if(False):
         if print_alert:
             print users, users[0]
-        db_connect.close()
-        cursor.close()
         return
 
     text = get_text(rank, news, twit, 3)
