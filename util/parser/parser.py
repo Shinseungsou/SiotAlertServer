@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import json
 import time
 import urllib
@@ -106,18 +107,21 @@ def parseTweet(keyword):
                 print l.select(".sub_retweet")[0].text.encode('utf-8')," | ",
                 print l.select(".sub_interest")[0].text.encode('utf-8')
                 twit['retweet'] = l.select(".sub_retweet")[0].text
+            if not twit.has_key('retweet'):
+                twit['retweet'] = ""
             result.append(twit)
             if i >= 1:
                 break
             i += 1
     while len(result) < 4:
+        print "len " + str(len(result))
         twit = dict()
         twit['name'] = ""
         twit['text'] = ""
         twit['time'] = ""
         twit['retweet'] = ""
         result.append(twit)
-
+    print result
     return result
 
 
@@ -181,6 +185,7 @@ def insert_news(db_connect, rank, news, twit):
                    'value (%s, %s, '
                    '%s, %s, %s, %s, %s, %s, '
                    '%s, %s, %s, %s, %s, %s)')
+    print twit[0][0]
     new_twit = (
         lastrow_id,
         0,
@@ -225,7 +230,7 @@ def insert_news(db_connect, rank, news, twit):
 def get_users(db_connect):
     cursor = db_connect.cursor()
     if test:
-        cursor.execute("select * from user where uid = 4 or chat_id = 202959968")
+        cursor.execute("select * from user where uid = 4 or chat_id = 202959968 or chat_id = 247427433")
     else:
         cursor.execute("select * from user")
     users = []
@@ -270,26 +275,48 @@ def get_group(db_connect):
     return group
 
 
+def get_notice(type):
+    if type == 1:
+        text = (u"실험에 참여해주셔서 감사합니다! \n\n참가자님께서는 2시간마다 *'네이버 실시간 검색어 1-10순위'*와 *'상승량'*을 알림으로 받아보시게 됩니다. \n\n매일 저녁, 수신하신 검색어 정보 수용도를 *설문으로* 확인할 예정입니다. \n\n그럼, 알림 봇과 즐거운 시간 보내세요! :-)\n\n(푸쉬 알림은 5일간 오전 10시부터 오후 8시까지 2시간 간격으로 일 6회 발송됩니다.)")
+    elif type == 2:
+        text = (u"실험에 참여해주셔서 감사합니다! \n\n참가자님께서는 2시간마다 *'네이버 실시간 검색어 1-10순위'*+ *'1,2위 검색어에 대한 트윗/소셜 반응'*을 알림으로 받아보시게 됩니다.\n\n정제하지 않은 트윗/소셜 멘션 그대로이기에, 다소 험한 말(욕설)을 포함한 반응들이 있더라도 너그러이 생각해주세요 :\*\n\n매일 저녁, 수신하신 검색어와 소셜정보 수용도를 *설문으로* 확인할 예정입니다. \n\n그럼, 알림 봇과 즐거운 시간 보내세요! :-)\n\n(푸쉬 알림은 5일간 오전 10시부터 오후 8시까지 2시간 간격으로 일 6회 발송됩니다.)")
+    elif type == 3:
+        text = (u"실험에 참여해주셔서 감사합니다! \n\n참가자님께서는 2시간마다 *'네이버 실시간 검색어 1-10순위'*+ *'1,2위 검색어에 대한 뉴스 기사 요약'*을 알림으로 받아보시게 됩니다.\n\n매일 저녁, 수신하신 검색어와 뉴스 기사정보 수용도를 *설문으로* 확인할 예정입니다. \n\n그럼, 알림 봇과 즐거운 시간 보내세요! :-)\n\n(푸쉬 알림은 5일간 오전 10시부터 오후 8시까지 2시간 간격으로 일 6회 발송됩니다.)")
+    return text
+
+
 def get_text(rank, news, twit, type):
     text = ""
     if type == 1:
         for r in range(1, 11):
-            text += ' ['+rank['up'+str(r)] + '] '
-            text += str(r)+' '+rank[str(r)] + '\n'
+            text += str(r)+'.'
+            text += ' *' + rank[str(r)] + '*'
+            text += ' \['+rank['up'+str(r)] + '] '
+            text += '\n'
     elif type == 2:
         for r in range(1, 11):
-            text += str(r)+' '+rank[str(r)] + '\n'
+            text += str(r)+'.'
+            text += ' *' + rank[str(r)] + '*'
+            text += ' \[' + rank['up'+str(r)] + '] '
+            text += '\n'
             if r <= 2:
-                text += ' [' + twit[r-1][0]['time'] + '] ' + twit[r-1][0]['text'] + ' - ' + twit[r-1][0]['retweet'] + '\n'
-                text += ' [' + twit[r-1][1]['time'] + '] ' + twit[r-1][1]['text'] + ' - ' + twit[r-1][1]['retweet'] + '\n'
-                text += ' [' + twit[r-1][2]['time'] + '] ' + twit[r-1][2]['text'] + ' - ' + twit[r-1][2]['retweet'] + '\n'
-                text += ' [' + twit[r-1][3]['time'] + '] ' + twit[r-1][3]['text'] + ' - ' + twit[r-1][3]['retweet'] + '\n'
+                for t_row in range(0, 4):
+                    print twit[r-1][t_row]
+
+                    if len(twit[r-1][t_row]['time']) > 0:
+                        if t_row > 0:
+                            text += '|\n'
+                        text += '- ' + twit[r-1][t_row]['text'] + ' - *' + twit[r-1][t_row]['retweet'] + '*'
+                        text += '\n'
+                text += '\n'
     elif type == 3:
         for r in range(1, 11):
-            text += str(r)+' '+rank[str(r)]
-            text += ' ['+rank['up'+str(r)] + ']\n'
+            text += str(r)+'. '
+            text += '*' + rank[str(r)] + '*'
+            text += ' \['+rank['up'+str(r)] + '] '
+            text += '\n'
             if r <= 2:
-                text += news[r-1]['title'] + " - " + news[r-1]['contents'] + '\n'
+                text += '- \[' + news[r-1]['title'] + "] - " + news[r-1]['contents'] + '\n\n'
     return text
 
 def userstep(db_connect):
@@ -355,11 +382,12 @@ def sendAlert(db_connect, now):
         if group_id and group_id >= 0:
             group_type = pgroup[int(group_id) - 1]['type']
             text = get_text(rank, news, twit, group_type)
+            # text = get_notice(group_type)
             group_interval = pgroup[int(group_id) - 1]['interval']
             print group_id, i, ' | ', (compare_time(group_interval, now)), ' | '
             if (compare_time(group_interval, now)):
-                text_temp = str(group_id) + '\n' + text
-                send_msg(chat_id, text_temp)
+                # text_temp = str(group_id) + '\n' + text
+                send_msg(chat_id, text)
 
 
     cursor.close()
@@ -384,7 +412,7 @@ def compare_time(interval, time):
 def send_msg(chat_id, text):
     key = private.key
     text = urllib.quote(text.encode('utf-8'))
-    url = 'https://api.telegram.org/bot' + key + '/sendMessage?chat_id=' + str(chat_id) + '&text=' + text
+    url = 'https://api.telegram.org/bot' + key + '/sendMessage?chat_id=' + str(chat_id) + '&parse_mode=markdown&text=' + text
     print url
     # print "12 : ", chat_id in people12, "; 6 : ", chat_id in people6
     try:
@@ -437,61 +465,73 @@ def test_parser():
 
 
 def test_sendmsg(db_connect):
+    msgsend = True
     t = datetime(2016, 11, 11, 01, 0)
     print '----------------'
     print compare_time(1, t)
     print compare_time(2, t)
-    # sendAlert(db_connect, t)
-    t = datetime(2016, 11, 11, 02, 0)
-    print '----------------'
-    print compare_time(1, t)
-    print compare_time(2, t)
-    # sendAlert(db_connect, t)
-    t = datetime(2016, 11, 11, 03, 0)
-    print '----------------'
-    print compare_time(1, t)
-    print compare_time(2, t)
-    # sendAlert(db_connect, t)
-    t = datetime(2016, 11, 11, 04, 0)
-    print '----------------'
-    print compare_time(1, t)
-    print compare_time(2, t)
-    # sendAlert(db_connect, t)
-    t = datetime(2016, 11, 11, 05, 0)
-    print '----------------'
-    print compare_time(1, t)
-    print compare_time(2, t)
-    # sendAlert(db_connect, t)
-    t = datetime(2016, 11, 11, 06, 0)
-    print '----------------'
-    print compare_time(1, t)
-    print compare_time(2, t)
-    # sendAlert(db_connect, t)
-    t = datetime(2016, 11, 11, 07, 0)
-    print '----------------'
-    print compare_time(1, t)
-    print compare_time(2, t)
-    # sendAlert(db_connect, t)
-    t = datetime(2016, 11, 11, 8, 0)
-    print '----------------'
-    print compare_time(1, t)
-    print compare_time(2, t)
-    # sendAlert(db_connect, t)
-    t = datetime(2016, 11, 11, 9, 0)
-    print '----------------'
-    print compare_time(1, t)
-    print compare_time(2, t)
-    # sendAlert(db_connect, t)
-    t = datetime(2016, 11, 11, 10, 0)
-    print '----------------'
-    print compare_time(1, t)
-    print compare_time(2, t)
-    # sendAlert(db_connect, t)
-    t = datetime(2016, 11, 11, 11, 0)
-    print '----------------'
-    print compare_time(1, t)
-    print compare_time(2, t)
-    # sendAlert(db_connect, t)
+    if msgsend:
+        sendAlert(db_connect, t)
+    # t = datetime(2016, 11, 11, 02, 0)
+    # print '----------------'
+    # print compare_time(1, t)
+    # print compare_time(2, t)
+    # if msgsend:
+    #     sendAlert(db_connect, t)
+    # t = datetime(2016, 11, 11, 03, 0)
+    # print '----------------'
+    # print compare_time(1, t)
+    # print compare_time(2, t)
+    # if msgsend:
+    #     sendAlert(db_connect, t)
+    # t = datetime(2016, 11, 11, 04, 0)
+    # print '----------------'
+    # print compare_time(1, t)
+    # print compare_time(2, t)
+    # if msgsend:
+    #     sendAlert(db_connect, t)
+    # t = datetime(2016, 11, 11, 05, 0)
+    # print '----------------'
+    # print compare_time(1, t)
+    # print compare_time(2, t)
+    # if msgsend:
+    #     sendAlert(db_connect, t)
+    # t = datetime(2016, 11, 11, 06, 0)
+    # print '----------------'
+    # print compare_time(1, t)
+    # print compare_time(2, t)
+    # if msgsend:
+    #     sendAlert(db_connect, t)
+    # t = datetime(2016, 11, 11, 07, 0)
+    # print '----------------'
+    # print compare_time(1, t)
+    # print compare_time(2, t)
+    # if msgsend:
+    #     sendAlert(db_connect, t)
+    # t = datetime(2016, 11, 11, 8, 0)
+    # print '----------------'
+    # print compare_time(1, t)
+    # print compare_time(2, t)
+    # if msgsend:
+    #     sendAlert(db_connect, t)
+    # t = datetime(2016, 11, 11, 9, 0)
+    # print '----------------'
+    # print compare_time(1, t)
+    # print compare_time(2, t)
+    # if msgsend:
+    #     sendAlert(db_connect, t)
+    # t = datetime(2016, 11, 11, 10, 0)
+    # print '----------------'
+    # print compare_time(1, t)
+    # print compare_time(2, t)
+    # if msgsend:
+    #     sendAlert(db_connect, t)
+    # t = datetime(2016, 11, 11, 11, 0)
+    # print '----------------'
+    # print compare_time(1, t)
+    # print compare_time(2, t)
+    # if msgsend:
+    #     sendAlert(db_connect, t)
 
     db_connect.close()
 
@@ -501,6 +541,8 @@ if __name__ == "__main__":
     pgroup = get_group(db_connect)
     run(db_connect)
     # test_sendmsg(db_connect)
+    # test_parser()
+    # userstep(db_connect)
     # parseTweet("jtbc")
     # db_connect.close()
     # sendAlert(datetime.now())
