@@ -230,7 +230,7 @@ def insert_news(db_connect, rank, news, twit):
 def get_users(db_connect):
     cursor = db_connect.cursor()
     if test:
-        cursor.execute("select * from user where uid = 4 or chat_id = 202959968 or chat_id = 247427433")
+        cursor.execute("select * from user where uid = 4 or chat_id = 202959968")# or chat_id = 247427433")
     else:
         cursor.execute("select * from user")
     users = []
@@ -276,7 +276,7 @@ def get_group(db_connect):
 
 
 def get_notice(type):
-    tt = 0
+    tt = 6
     if tt == 0:
         if type == 1:
             text = (u"오늘은 어제와 다른 구성의 알림이 발송됩니다. \n\n참가자님께서는 2시간마다 *'네이버 실시간 검색어 1-10순위'*와 *'상승량'*을 알림으로 받아보시게 됩니다. \n\n매일 저녁, 수신하신 검색어 정보 수용도를 *설문으로* 확인할 예정입니다. \n\n그럼, 알림 봇과 즐거운 시간 보내세요! :-)\n\n(푸쉬 알림은 5일간 오전 10시부터 오후 8시까지 2시간 간격으로 일 6회 발송됩니다.)")
@@ -291,6 +291,37 @@ def get_notice(type):
             text = (u"\n<1일차 알림 봇, 자러가기 전 부탁드립니다>\n\n1일차 실험이 종료되었습니다. 감사합니다!\n아래 링크에서 설문을 부탁드립니다.\nhttps://goo.gl/forms/jZWnrM8H37hfRu9A3\n(내일부터는 설문 문항이 더욱 짧아질 예정입니다.)\n\n감사합니다. 좋은 밤 보내세요!")
         elif type == 3:
             text = (u"\n<1일차 알림 봇, 자러가기 전 부탁드립니다>\n\n1일차 실험이 종료되었습니다. 감사합니다!\n아래 링크에서 설문을 부탁드립니다.\nhttps://goo.gl/forms/0JEQ43YZO6NyK6H02\n(내일부터는 설문 문항이 더욱 짧아질 예정입니다.)\n\n감사합니다. 좋은 밤 보내세요!")
+    elif tt == 2:
+        if type == 1:
+            text = (u"\n<설문지 오류로, 새로운 링크로 응답을 부탁드립니다>\n\n너무나도 죄송합니다... ㅠㅠㅠ\n서버 오류로 설문지 형식이 잘못 발송되었습니다.\n\n아직 설문을 하지 않으신 분께서는, 아래 링크로 설문을 완료해주세요.\nhttps://goo.gl/forms/IEtHQSSCmrWthZqF2\n\n혼란을 드려 죄송합니다. 감사합니다!")
+        elif type == 2:
+            text = (u"\n<설문지 오류로, 새로운 링크로 응답을 부탁드립니다>\n\n너무나도 죄송합니다... ㅠㅠㅠ\n서버 오류로 설문지 형식이 잘못 발송되었습니다.\n\n아직 설문을 하지 않으신 분께서는, 아래 링크로 설문을 완료해주세요.\nhttps://goo.gl/forms/f5f428qbFT243h112\n\n혼란을 드려 죄송합니다. 감사합니다!")
+        elif type == 3:
+            text = (u"\n<설문지 오류로, 새로운 링크로 응답을 부탁드립니다>\n\n너무나도 죄송합니다... ㅠㅠㅠ\n서버 오류로 설문지 형식이 잘못 발송되었습니다.\n\n아직 설문을 하지 않으신 분께서는, 아래 링크로 설문을 완료해주세요.\nhttps://goo.gl/forms/VUJ2WSABHuT2stA53\n\n혼란을 드려 죄송합니다. 감사합니다!")
+    elif tt == 3:
+        if type == 1:
+            text = (u"<3일차 알림 봇, 첫눈과 함께 찾아왔습니다>\n\n3일차 실험이 종료되었습니다. 감사합니다!\n아래 링크에서 설문을 부탁드립니다.\nhttps://goo.gl/forms/sPtKl1sLirfM1YKB2\n\n감사합니다. 추운날씨에 감기 조심하세요!")
+        elif type == 2:
+            text = (u"<3일차 알림 봇, 첫눈과 함께 찾아왔습니다>\n\n3일차 실험이 종료되었습니다. 감사합니다!\n아래 링크에서 설문을 부탁드립니다.\nhttps://goo.gl/forms/AMAIkiRj3U88NlMt1\n\n감사합니다. 추운날씨에 감기 조심하세요!")
+        elif type == 3:
+            text = (u"<3일차 알림 봇, 첫눈과 함께 찾아왔습니다>\n\n3일차 실험이 종료되었습니다. 감사합니다!\n아래 링크에서 설문을 부탁드립니다.\nhttps://goo.gl/forms/IiAb93smpwoJA2bS2\n\n감사합니다. 추운날씨에 감기 조심하세요!")
+    elif tt == 4:
+        if type == 1:
+            text = (u"<4일차 알림 봇, 설문을 부탁드립니다>\n\n4일차 실험이 종료되었습니다. 감사합니다!\n아래 링크에서 설문을 부탁드립니다.\nhttps://goo.gl/forms/perRXVWmYTHdtojX2\n\n감사합니다. 좋은 저녁 보내세요!")
+        elif type == 2:
+            text = (u"<4일차 알림 봇, 설문을 부탁드립니다>\n\n4일차 실험이 종료되었습니다. 감사합니다!\n아래 링크에서 설문을 부탁드립니다.\nhttps://goo.gl/forms/GcWazizqB2r4jX673\n\n감사합니다. 좋은 저녁 보내세요!")
+        elif type == 3:
+            text = (u"<4일차 알림 봇, 설문을 부탁드립니다>\n\n4일차 실험이 종료되었습니다. 감사합니다!\n아래 링크에서 설문을 부탁드립니다.\nhttps://goo.gl/forms/RlDl21rwoBewEbXI3\n\n감사합니다. 좋은 저녁 보내세요!")
+    elif tt == 5:
+        text = (u"실험 마지막 날입니다! 오늘은 어제 선택하신 형식으로 알림이 발송됩니다.\n\n오늘 저녁 9시 경, 검색어와 정보 수용도를 마지막으로 확인한 이후 실험이 종료됩니다.\n함께해주셔서 감사합니다. 마지막 하루까지, 알림 봇과 즐거운 시간 보내세요! :-)\n\n(푸쉬 알림은 오전 10시부터 오후 8시까지 2시간 간격으로 일 6회 발송됩니다.)")
+    elif tt == 6:
+        if type == 1:
+            text = (u"<5일차 알림 봇, 마지막 설문 부탁드립니다>\n\n5일차로 모든 실험이 종료되었습니다. 감사합니다!\n아래 링크에서 설문을 부탁드립니다.\nhttps://goo.gl/forms/To9Ke6pZ4QPqwHM23\n\n그동안 감사했습니다. 좋은 일만 가득하세요!")
+        elif type == 2:
+            text = (u"<5일차 알림 봇, 마지막 설문 부탁드립니다>\n\n5일차로 모든 실험이 종료되었습니다. 감사합니다!\n아래 링크에서 설문을 부탁드립니다.\nhttps://goo.gl/forms/X86WiaJznTapAj9f2\n\n그동안 감사했습니다. 좋은 일만 가득하세요!")
+        elif type == 3:
+            text = (u"<5일차 알림 봇, 마지막 설문 부탁드립니다>\n\n5일차로 모든 실험이 종료되었습니다. 감사합니다!\n아래 링크에서 설문을 부탁드립니다.\nhttps://goo.gl/forms/vMyGwmNowC1hOnsH2\n\n그동안 감사했습니다. 좋은 일만 가득하세요!")
+
 
     return text
 
