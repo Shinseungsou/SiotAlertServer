@@ -582,6 +582,7 @@ def test_sendmsg(db_connect):
 if __name__ == "__main__":
     db_connect = config.mjudb().getDB()
     pgroup = get_group(db_connect)
+    db_connect.close()
     run(db_connect)
     # test_sendmsg(db_connect)
     # test_parser()
