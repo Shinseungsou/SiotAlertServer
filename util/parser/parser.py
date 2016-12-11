@@ -10,7 +10,7 @@ from bs4 import BeautifulSoup
 import private
 import config
 
-test = False
+test = True
 print_news = True
 print_db = True
 print_alert = True
