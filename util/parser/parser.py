@@ -275,7 +275,7 @@ def put_messages(db_connect, messages):
     if print_db:
         print query
     for i in val:
-        print i.encode('utf-8')
+        print i
     cursor.executemany(query, val)
     db_connect.commit()
     cursor.close()
