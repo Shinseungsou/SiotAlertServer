@@ -275,7 +275,7 @@ def put_messages(db_connect, messages):
     if print_db:
         print query
     for i in val:
-        print i
+        print i.encode('utf-8')
     cursor.executemany(query, val)
     db_connect.commit()
     cursor.close()
@@ -395,6 +395,7 @@ mock_response = ('{"ok":true,"result":['
                 '{"update_id":343241007,"message":{"message_id":1766,"from":{"id":202959968,"first_name":"\uc2b9\uc218"},"chat":{"id":202959968,"first_name":"\uc2b9\uc218","type":"private"},"date":1480738171,"text":"\uc2a4\uc2a4\uc2a4"}},'
                 '{"update_id":343241008,"message":{"message_id":1767,"from":{"id":202959968,"first_name":"\uc2b9\uc218"},"chat":{"id":202959968,"first_name":"\uc2b9\uc218","type":"private"},"date":1480738172,"text":"\uc57c"}}]}')
 
+
 def parse_message(chat_list, last_chat_id):
     message = dict()
     for i in chat_list:
@@ -403,12 +404,13 @@ def parse_message(chat_list, last_chat_id):
         chat['update_id'] = i['update_id']
         chat['date'] = datetime.utcfromtimestamp(i['message']['date'])
         chat['text'] = i['message']['text']
-        if print_alert :
 
+        if print_alert:
             print i['update_id'],
             print i['message']['date'], datetime.utcfromtimestamp(i['message']['date']),
-            print i['message']['text'],
+            print i['message']['text'].encode('utf-8'),
             print chat['update_id'] > last_chat_id, chat['update_id'], last_chat_id
+
         if chat['update_id'] > last_chat_id:
             if user_id in message.keys():
                 message[user_id].append(chat)
@@ -418,6 +420,7 @@ def parse_message(chat_list, last_chat_id):
             last_chat_id = chat['update_id']
 
     return message, last_chat_id
+
 
 def userstep(db_connect):
     key = private.key
