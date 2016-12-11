@@ -3,7 +3,7 @@ import json
 import time
 import urllib
 import urllib2
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from bs4 import BeautifulSoup
 
@@ -259,6 +259,34 @@ def put_users(db_connect, users):
     db_connect.commit()
     cursor.close()
 
+
+def put_messages(db_connect, messages):
+    cursor = db_connect.cursor()
+
+    query = ("insert into chat"
+            "(chat_id, update_id, text, date) values (%s, %s, %s, %s)")
+    val = []
+    for i in messages.keys():
+        for m in messages[i]:
+            v = (
+                i, m['update_id'], m['text'], m['date']
+            )
+            val.append(v)
+    if print_db:
+        print query
+    for i in val:
+        print i
+    cursor.executemany(query, val)
+    db_connect.commit()
+    cursor.close()
+
+def get_latest_chat(db_connect):
+    cursor = db_connect.cursor()
+    query = "select * from chat order by date desc limit 1"
+    cursor.execute(query)
+    for c in cursor:
+        return c[2]
+
 def get_group(db_connect):
     cursor = db_connect.cursor()
     query = ("select * from msg_group order by uid asc")
@@ -360,6 +388,37 @@ def get_text(rank, news, twit, type):
                 text += '- \[' + news[r-1]['title'] + "] - " + news[r-1]['contents'] + '\n\n'
     return text
 
+mock_response = ('{"ok":true,"result":['
+                 '{"update_id":343241004,"message":{"message_id":1763,"from":{"id":191911803,"first_name":"\ud604\uc815","last_name":"\uc774"},"chat":{"id":191911803,"first_name":"\ud604\uc815","last_name":"\uc774","type":"private"},"date":1480659186,"text":"Gaebalja"}},'
+                '{"update_id":343241005,"message":{"message_id":1764,"from":{"id":202959968,"first_name":"\uc2b9\uc218"},"chat":{"id":202959968,"first_name":"\uc2b9\uc218","type":"private"},"date":1480738155,"text":"\uc548\ub155?"}},'
+                '{"update_id":343241006,"message":{"message_id":1765,"from":{"id":202959968,"first_name":"\uc2b9\uc218"},"chat":{"id":202959968,"first_name":"\uc2b9\uc218","type":"private"},"date":1480738157,"text":"\ub09c"}},'
+                '{"update_id":343241007,"message":{"message_id":1766,"from":{"id":202959968,"first_name":"\uc2b9\uc218"},"chat":{"id":202959968,"first_name":"\uc2b9\uc218","type":"private"},"date":1480738171,"text":"\uc2a4\uc2a4\uc2a4"}},'
+                '{"update_id":343241008,"message":{"message_id":1767,"from":{"id":202959968,"first_name":"\uc2b9\uc218"},"chat":{"id":202959968,"first_name":"\uc2b9\uc218","type":"private"},"date":1480738172,"text":"\uc57c"}}]}')
+
+def parse_message(chat_list, last_chat_id):
+    message = dict()
+    for i in chat_list:
+        user_id = i['message']['chat']['id']
+        chat = dict()
+        chat['update_id'] = i['update_id']
+        chat['date'] = datetime.utcfromtimestamp(i['message']['date'])
+        chat['text'] = i['message']['text']
+        if print_alert :
+
+            print i['update_id'],
+            print i['message']['date'], datetime.utcfromtimestamp(i['message']['date']),
+            print i['message']['text'],
+            print chat['update_id'] > last_chat_id, chat['update_id'], last_chat_id
+        if chat['update_id'] > last_chat_id:
+            if user_id in message.keys():
+                message[user_id].append(chat)
+            else:
+                message[user_id] = []
+                message[user_id].append(chat)
+            last_chat_id = chat['update_id']
+
+    return message, last_chat_id
+
 def userstep(db_connect):
     key = private.key
     get_chat = 'https://api.telegram.org/bot' + key + '/getUpdates'
@@ -369,12 +428,17 @@ def userstep(db_connect):
     chat_response = urllib2.urlopen(get_chat).read()
     chat_list = json.loads(chat_response)
 
+    last_chat = get_latest_chat(db_connect)
+    user_chat, l = parse_message(chat_list['result'], last_chat)
+
+    put_messages(db_connect, user_chat)
 
     users = get_users(db_connect)
     new_users = []
 
+
     for i in chat_list['result']:
-        if not contains_user(i['message']['chat']['id'], users):
+        if not contains_user(i['message']['chat']['id'], users) and not i['message']['chat']['id'] in new_users:
             new_users.append(i['message']['chat']['id'])
     if print_alert:
         print new_users
@@ -498,6 +562,11 @@ def run(db_connect):
     timer()
 
     db_connect.close()
+
+def test_get_message(db_connect = None):
+    hour_offset = timedelta(hours=9)
+    print datetime.utcfromtimestamp(1480738172) + hour_offset
+    userstep(db_connect)
 
 
 def test_parser():
