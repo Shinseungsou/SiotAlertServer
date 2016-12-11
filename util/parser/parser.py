@@ -541,7 +541,7 @@ def timer():
             print start_date, ' : ', now, ':', end_date, "bye", now - end_date
             break
         print 'check : ', startHour <= now.hour <= endHour, (now.minute in [0]), now.minute
-        if startHour <= now.hour <= endHour and (now.minute in [0]):
+        if startHour <= now.hour <= endHour and (now.minute in [0, 10, 20, 30, 40, 50]):
             print "send alert ", now
             sendAlert(db_connect, now)
         else:
