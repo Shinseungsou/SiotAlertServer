@@ -59,6 +59,21 @@ def parse():
 
     return result, news, twit
 
+def split_text(text, length, space = False):
+    if length < 0:
+        return text
+    size = 0
+    result_text = ""
+    if space:
+        for t in text.split(' '):
+            size += len(t)
+            print size, length, result_text
+            if size > length:
+                return result_text[1:]
+            result_text += ' ' + t
+    else:
+        return text[:length]
+
 def parseNews(url):
     r = urllib2.urlopen(url)
     soup = BeautifulSoup(r, "html.parser", from_encoding='utf-8')
