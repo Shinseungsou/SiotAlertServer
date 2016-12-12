@@ -19,7 +19,7 @@ print_alert = True
 start_date = datetime(2016, 11, 11, 02, 0)
 end_date = datetime(2016, 11, 30, 22, 24)
 
-startHour = 10
+startHour = 0
 endHour = 23
 
 # TIMEZONE
