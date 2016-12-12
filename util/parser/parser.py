@@ -426,7 +426,6 @@ def userstep(db_connect):
     key = private.key
     get_chat = 'https://api.telegram.org/bot' + key + '/getUpdates'
 
-
     print get_chat
     chat_response = urllib2.urlopen(get_chat).read()
     chat_list = json.loads(chat_response)
@@ -438,7 +437,6 @@ def userstep(db_connect):
 
     users = get_users(db_connect)
     new_users = []
-
 
     for i in chat_list['result']:
         if not contains_user(i['message']['chat']['id'], users) and not i['message']['chat']['id'] in new_users:
@@ -491,8 +489,8 @@ def sendAlert(db_connect, now):
 
         if group_id and group_id >= 0:# and group_id == 2:
             group_type = pgroup[int(group_id) - 1]['type']
-            # text = get_text(rank, news, twit, group_type)
-            text = get_notice(group_type)
+            text = get_text(rank, news, twit, group_type)
+            # text = get_notice(group_type)
             group_interval = pgroup[int(group_id) - 1]['interval']
             print group_id, i, ' | ', (compare_time(group_interval, now)), ' | '
             if (compare_time(group_interval, now)):
